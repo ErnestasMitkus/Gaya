@@ -33,10 +33,10 @@ public class Level {
     private HUD hud;
 
 //    Scenario
-    Scenario scenario;
+    private Scenario scenario;
 
 //    Waves
-    Wave currentWave;
+    private Wave currentWave;
 
 //    Background
     private LoopedBackground bg;
@@ -166,6 +166,11 @@ public class Level {
             return;
         }
 
+        if (player.dead()) {
+            System.out.println("PLAYER IS DEAD");
+            return;
+        }
+
         // Background
         bg.update(delta);
 
@@ -191,6 +196,7 @@ public class Level {
             if (player.collidesWith(enemy)) {
                 System.out.println("COLLISION");
                 enemy.hitFor(100);
+                player.hitFor(enemy.getImpactDamage());
             }
 
             if (enemy.canRemove()) {

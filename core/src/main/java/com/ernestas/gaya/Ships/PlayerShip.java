@@ -121,9 +121,18 @@ public class PlayerShip extends Ship {
         }
     }
 
+    public void hitFor(int damage) {
+        health -= damage;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+    public boolean dead() { return health <= 0; }
+
+    public int getHealth() { return health; }
+    public int getMaxHealth() { return MAX_HEALTH; }
     public void addScore(int points) {
         score += points;
     }
-
     public int getScore() { return score; }
 }

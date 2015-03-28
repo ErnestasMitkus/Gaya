@@ -11,10 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Scenario {
-
-    public static final int NO_EVENT = 0;
-    public static final int NEW_PICKUP = 1;
-
     private List<Wave> waves = new LinkedList<Wave>();
 
     private String name = "";
@@ -22,11 +18,6 @@ public class Scenario {
 
     public Scenario() {
 
-    }
-
-    public int event() {
-        // Powerups
-        return NO_EVENT;
     }
 
     public void addWave(Wave wave) {

@@ -53,6 +53,7 @@ public class EnemyShip extends Ship {
     private boolean canRemove = false;
 
     private int points = 100;
+    private int impactDamage = 10;
 
     private EnemyShip() {
         this.sprite = null;
@@ -140,5 +141,7 @@ public class EnemyShip extends Ship {
     }
 
     public int getPoints() { return points; }
+
+    public int getImpactDamage() { return impactDamage; }
 
 }
