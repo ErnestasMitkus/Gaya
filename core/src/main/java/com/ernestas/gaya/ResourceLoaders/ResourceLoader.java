@@ -2,6 +2,7 @@ package com.ernestas.gaya.ResourceLoaders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.Util.Settings.Settings;
@@ -25,7 +26,10 @@ public class ResourceLoader {
         simpleBullet,
 
         // Effects
-        explosionSS
+        explosionSS,
+
+        // Empty sprite
+        emptySprite
     }
 
     ResourcesPather pather;
@@ -73,6 +77,10 @@ public class ResourceLoader {
     }
 
     public Sprite getResource(ResourceId id) {
+        if (id == ResourceId.emptySprite) {
+            return new Sprite(new Texture(new Pixmap(0, 0, Pixmap.Format.RGBA8888)));
+        }
+
         if (loaded == false) {
             return null;
         }
