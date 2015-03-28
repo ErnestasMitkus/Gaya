@@ -12,11 +12,20 @@ import java.util.HashMap;
 public class ResourceLoader {
 
     public enum ResourceId {
+        // Splash
         splash,
+
+        // Background
         background, cloud,
+
+        // Ships
         shipPlayer, shipGreen,
+
+        // Bullets
         simpleBullet,
-        explosionSS 
+
+        // Effects
+        explosionSS
     }
 
     ResourcesPather pather;

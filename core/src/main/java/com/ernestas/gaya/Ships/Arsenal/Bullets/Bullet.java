@@ -1,4 +1,4 @@
-package com.ernestas.gaya.Ships.Bullets;
+package com.ernestas.gaya.Ships.Arsenal.Bullets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -7,6 +7,8 @@ import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
 public abstract class Bullet {
+
+    private float bulletXOffset = 7;
 
     protected Ship author;
 
@@ -19,10 +21,15 @@ public abstract class Bullet {
         this.author = author;
         this.sprite = sprite;
         this.speed = speed;
-        this.vector = flyVector;
+        this.vector = flyVector.onetized();
         this.damage = damage;
 
-        sprite.setPosition(position.x, position.y);
+        float rotationDegrees = (float) (Math.toDegrees(Math.atan2(this.vector.x, this.vector.y)));
+
+        sprite.setPosition(position.x + bulletXOffset, position.y);
+
+        sprite.setOriginCenter();
+        sprite.setRotation(360 - rotationDegrees);
     }
 
     public void update(float delta) {

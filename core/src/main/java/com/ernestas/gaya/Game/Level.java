@@ -11,26 +11,26 @@ import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.Gameplay.Scenario;
 import com.ernestas.gaya.Gameplay.Wave;
 import com.ernestas.gaya.GayaEntry;
+import com.ernestas.gaya.HUD.HUD;
 import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
-import com.ernestas.gaya.Ships.Bullets.Bullet;
+import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Ships.PlayerShip;
-import com.ernestas.gaya.Ships.Ship;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 import com.ernestas.gaya.Validator.JSONToScenarioConverter;
-import com.ernestas.gaya.Validator.Validator;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Level {
 
     private GayaEntry gaya;
     private InputProcessor input;
+
+    private HUD hud;
 
 //    Scenario
     Scenario scenario;
@@ -56,12 +56,12 @@ public class Level {
     public Level(GayaEntry gaya, InputProcessor input) {
         this.gaya = gaya;
         this.input = input;
+        hud = new HUD(this);
     }
 
     // Should be only called once
     public void setup() {
         //TODO: do stuff
-        restartLevel();
 
         Sprite playerSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipPlayer);
         player = new PlayerShip(this, playerSprite, new Vector2f(Settings.getInstance().getWidth() / 2, 100));
@@ -69,12 +69,16 @@ public class Level {
         Sprite bgSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.background);
         bgSprite.setScale((Settings.getInstance().getWidth() / bgSprite.getWidth()), bgSprite.getScaleY());
         bg = new LoopedBackground(new Sprite(bgSprite), -backgroundSpeed, false);
+
+        restartLevel();
     }
 
     public void restartLevel() {
         paused = false;
         currentWave = Wave.EMPTY_WAVE;
         bullets.clear();
+        player.restart();
+
 //        scenario = Scenario.getTestScenario();
         try {
             scenario = JSONToScenarioConverter.convertFromFile("Scenarios/scenario1.json");
@@ -82,7 +86,6 @@ public class Level {
             e.printStackTrace();
             scenario = Scenario.getTestScenario();
         }
-        System.out.println("After");
     }
 
 
@@ -104,6 +107,8 @@ public class Level {
         for (Bullet bullet : bullets) {
             bullet.getSprite().draw(batch);
         }
+
+        hud.render(batch);
 
         if (debug) {
             batch.end();
@@ -211,6 +216,9 @@ public class Level {
                         // hit enemy
                         enemy.hitFor(bullet.getDamage());
                         hit = true;
+                        if (enemy.getHealth() <= 0) {
+                            player.addScore(enemy.getPoints());
+                        }
                     }
                 }
             }
@@ -231,4 +239,6 @@ public class Level {
             this.bullets.add(bullet);
         }
     }
+
+    public PlayerShip getPlayer() { return player; }
 }

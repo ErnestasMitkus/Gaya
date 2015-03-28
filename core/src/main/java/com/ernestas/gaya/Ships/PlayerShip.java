@@ -2,11 +2,11 @@ package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 import com.ernestas.gaya.Game.Level;
 import com.ernestas.gaya.Input.InputProcessor;
-import com.ernestas.gaya.Ships.Bullets.Bullet;
-import com.ernestas.gaya.Ships.Bullets.SimpleBullet;
+import com.ernestas.gaya.Ships.Arsenal.Arsenal;
+import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
+import com.ernestas.gaya.Ships.Arsenal.Bullets.SimpleBullet;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
@@ -15,18 +15,23 @@ import java.util.List;
 
 public class PlayerShip extends Ship {
 
-    private static final int DEFAULT_HEALTH = 3;
+    private static final int MAX_HEALTH = 30;
     private static final float DEFAULT_SPEED = 150f;
 
     private Sprite sprite = null;
-    private int health = DEFAULT_HEALTH;
+    private int health = MAX_HEALTH;
     private float speed = DEFAULT_SPEED;
 
     private float fireRate = 0.5f;
     private float timePassedSinceLastShoot = fireRate;
 
+    private Arsenal arsenal;
+
+    private int score;
+
     public PlayerShip(Level level, Vector2f position) {
         super(level, position);
+        arsenal = new Arsenal(this);
     }
 
     public PlayerShip(Level level, Sprite sprite, Vector2f position) {
@@ -34,6 +39,11 @@ public class PlayerShip extends Ship {
         this.sprite = sprite;
         setBounds(sprite.getBoundingRectangle());
         setPosition(getPosition());
+    }
+
+    public void restart() {
+        arsenal.resetBulletType();
+        score = 0;
     }
 
     public Sprite getSprite() {
@@ -48,7 +58,7 @@ public class PlayerShip extends Ship {
         float vecX = 0;
         float vecY = 0;
 
-        if (input.isPressed(Input.Keys.A) || input.isHold(Input.Keys.A)) {
+        if (input.isPressed(Input.Keys.A) || input.isHold(Input.Keys.A)) { //hold not needed?
             vecX += -1;
         }
         if (input.isPressed(Input.Keys.D) || input.isHold(Input.Keys.D)) {
@@ -73,16 +83,24 @@ public class PlayerShip extends Ship {
         if (input.isPressed(Input.Keys.SPACE) && canShoot()) {
             shoot();
         }
+
+        if (input.isPressedAdvanced(Input.Keys.NUMPAD_1)) {
+            arsenal.setBulletType(Arsenal.BulletType.singleBullet);
+        }
+        if (input.isPressedAdvanced(Input.Keys.NUMPAD_2)) {
+            arsenal.setBulletType(Arsenal.BulletType.doubleBullet);
+        }
+        if (input.isPressedAdvanced(Input.Keys.NUMPAD_3)) {
+            arsenal.setBulletType(Arsenal.BulletType.tripleBullet);
+        }
+        if (input.isPressedAdvanced(Input.Keys.NUMPAD_4)) {
+            arsenal.setBulletType(Arsenal.BulletType.pentaBullet);
+        }
     }
 
     private void shoot() {
         timePassedSinceLastShoot = 0f;
-        List<Bullet> bullets = new ArrayList<Bullet>();
-
-        // Change to arsenal
-        bullets.add(new SimpleBullet(this, new Vector2f(this.getBounds().getX(), this.getBounds().getY()))) ;
-
-        level.addBullets(bullets);
+        arsenal.shoot();
     }
 
     private boolean canShoot() {
@@ -103,4 +121,9 @@ public class PlayerShip extends Ship {
         }
     }
 
+    public void addScore(int points) {
+        score += points;
+    }
+
+    public int getScore() { return score; }
 }

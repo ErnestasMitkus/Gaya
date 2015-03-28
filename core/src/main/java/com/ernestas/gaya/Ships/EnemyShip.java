@@ -52,6 +52,8 @@ public class EnemyShip extends Ship {
 
     private boolean canRemove = false;
 
+    private int points = 100;
+
     private EnemyShip() {
         this.sprite = null;
         this.health = 0;
@@ -136,5 +138,7 @@ public class EnemyShip extends Ship {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public int getPoints() { return points; }
 
 }
