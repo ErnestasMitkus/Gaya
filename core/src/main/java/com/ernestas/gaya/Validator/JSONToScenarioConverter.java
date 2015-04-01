@@ -2,6 +2,8 @@ package com.ernestas.gaya.Validator;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.ernestas.gaya.AI.AI;
+import com.ernestas.gaya.AI.FloatAI;
 import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.Gameplay.Scenario;
 import com.ernestas.gaya.Gameplay.Wave;
@@ -23,7 +25,7 @@ public class JSONToScenarioConverter {
         public String name = "";
         public int health = 0;
         public float speed = 0;
-        public String ai = "float";
+        public AI ai = null;
         public String spriteName = "enemyShip32";
         public Sprite sprite;
 
@@ -35,9 +37,6 @@ public class JSONToScenarioConverter {
                 return false;
             }
             if (speed <= 0) {
-                return false;
-            }
-            if (!ai.equalsIgnoreCase("float")) {
                 return false;
             }
             if (!spriteName.equalsIgnoreCase("greenShip")) {
@@ -99,13 +98,21 @@ public class JSONToScenarioConverter {
         struct.name = obj.getString("name");
         struct.health = obj.getInt("health");
         struct.speed = (float) obj.getInt("speed");
-        struct.ai = obj.getString("ai");
+        struct.ai = parseAI(obj.getString("ai"));
         struct.spriteName = obj.getString("sprite");
 
         if (GameSettings.getInstance().getResourceLoader() != null)
             struct.sprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.resourceIdFromName(struct.spriteName));
 
         return struct;
+    }
+
+    public static AI parseAI(String aiString) {
+        if (aiString.equalsIgnoreCase("float")) {
+            return new FloatAI();
+        }
+
+        return null;
     }
 
     private static void parseWaves(Scenario scenario, Map<String, EnemyStruct> map, JSONObject obj) throws JSONException {
@@ -153,6 +160,7 @@ public class JSONToScenarioConverter {
                 enemy.ship = new EnemyShip.Builder()
                                 .withSpeed(enemyStruct.speed)
                                 .withHealth(enemyStruct.health)
+                                .withAI(enemyStruct.ai)
                                 .withSprite(
                                     GameSettings.getInstance().getResourceLoader().getResource(
                                         ResourceLoader.resourceIdFromName(enemyStruct.spriteName)

@@ -1,6 +1,7 @@
 package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.ernestas.gaya.AI.AI;
 import com.ernestas.gaya.Game.Level;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
@@ -34,6 +35,11 @@ public class EnemyShip extends Ship {
             return this;
         }
 
+        public Builder withAI(AI ai) {
+            ship.setAI(ai);
+            return this;
+        }
+
         public Builder withPosition(Vector2f pos) {
             ship.setPosition(pos.x, pos.y);
             return this;
@@ -54,18 +60,21 @@ public class EnemyShip extends Ship {
 
     private int points = 100;
     private int impactDamage = 10;
+    private AI ai;
 
     private EnemyShip() {
         this.sprite = null;
         this.health = 0;
         this.speed = 0f;
+        ai = null;
         init();
     }
 
-    public EnemyShip(Sprite sprite, int health, float speed) {
+    public EnemyShip(Sprite sprite, int health, float speed, AI ai) {
         this.sprite = sprite;
         this.health = health;
         this.speed = speed;
+        this.ai = ai;
         init();
     }
 
@@ -77,6 +86,10 @@ public class EnemyShip extends Ship {
 
     public void update(float delta) {
         //TODO: AI
+        if (ai != null) {
+            ai.update(delta);
+        }
+
         if (health <= 0) {
             exploding = true;
         }
@@ -88,8 +101,6 @@ public class EnemyShip extends Ship {
             }
         }
 
-        float flySpeed = exploding ? -10f : speed;
-        setPosition(position.x, position.y - flySpeed * delta * Settings.getInstance().getScale());
         if (getPosition().y + sprite.getHeight() < 0) {
             canRemove = true;
         }
@@ -143,5 +154,9 @@ public class EnemyShip extends Ship {
     public int getPoints() { return points; }
 
     public int getImpactDamage() { return impactDamage; }
+
+    public void setAI(AI ai) { this.ai = ai; }
+
+    public AI getAI() { return ai; }
 
 }

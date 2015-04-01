@@ -182,6 +182,7 @@ public class Level {
             currentWave = scenario.getNextWave();
             for (Wave.EnemyWithOffset enemy : currentWave.getEnemyList()) {
                 enemy.ship.setLevel(this);
+                enemy.ship.getAI().init(this, enemy.ship);
             }
         }
 
