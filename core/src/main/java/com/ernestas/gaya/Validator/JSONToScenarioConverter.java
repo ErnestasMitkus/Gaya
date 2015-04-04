@@ -160,7 +160,7 @@ public class JSONToScenarioConverter {
                 enemy.ship = new EnemyShip.Builder()
                                 .withSpeed(enemyStruct.speed)
                                 .withHealth(enemyStruct.health)
-                                .withAI(enemyStruct.ai)
+                                .withAI(enemyStruct.ai.clone())
                                 .withSprite(
                                     GameSettings.getInstance().getResourceLoader().getResource(
                                         ResourceLoader.resourceIdFromName(enemyStruct.spriteName)

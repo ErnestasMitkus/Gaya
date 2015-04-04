@@ -28,4 +28,9 @@ public class FloatAI implements AI {
         ship.setPosition(ship.getPosition().x, ship.getPosition().y - flySpeed * delta * Settings.getInstance().getScale());
     }
 
+
+    @Override
+    public AI clone() {
+        return new FloatAI();
+    }
 }

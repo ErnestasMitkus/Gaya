@@ -9,4 +9,6 @@ public interface AI {
 
     public void update(float delta);
 
+    public AI clone();
+
 }
