@@ -13,6 +13,8 @@ public class ResourcesPather {
     // Enemy Ship
     public String shipGreen;
     public String shipWhite;
+    public String shipBlack;
+    public String shipBlue;
 
     public String simpleBullet;
 
@@ -40,6 +42,8 @@ public class ResourcesPather {
         resourcesPather.shipPlayer = defaultPath + "spaceship32.png";
         resourcesPather.shipGreen = defaultPath + "greenShip.png";
         resourcesPather.shipWhite = defaultPath + "whiteShip.png";
+        resourcesPather.shipBlack = defaultPath + "blackShip.png";
+        resourcesPather.shipBlue = defaultPath + "blueShip.png";
         resourcesPather.explosionSS = defaultPath + "explosionSS.png";
         resourcesPather.simpleBullet = defaultPath + "bullets/simpleBullet.png";
 

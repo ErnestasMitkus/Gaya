@@ -21,6 +21,7 @@ public class ResourceLoader {
 
         // Ships
         shipPlayer, shipGreen, shipWhite,
+        shipBlack, shipBlue,
 
         // Bullets
         simpleBullet,
@@ -53,6 +54,8 @@ public class ResourceLoader {
             loadResource(ResourceId.shipPlayer, pather.shipPlayer);
             loadResource(ResourceId.shipGreen, pather.shipGreen);
             loadResource(ResourceId.shipWhite, pather.shipWhite);
+            loadResource(ResourceId.shipBlack, pather.shipBlack);
+            loadResource(ResourceId.shipBlue, pather.shipBlue);
             loadResource(ResourceId.explosionSS, pather.explosionSS, false);
             loadResource(ResourceId.simpleBullet, pather.simpleBullet);
 
@@ -96,6 +99,10 @@ public class ResourceLoader {
             return ResourceId.shipGreen;
         } else if (resourceName.equalsIgnoreCase("whiteShip")) {
             return ResourceId.shipWhite;
+        } else if (resourceName.equalsIgnoreCase("blackShip")) {
+            return ResourceId.shipBlack;
+        } else if (resourceName.equalsIgnoreCase("blueShip")) {
+            return ResourceId.shipBlue;
         }
 
         return null;

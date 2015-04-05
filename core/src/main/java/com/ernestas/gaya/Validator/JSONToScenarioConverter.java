@@ -27,7 +27,7 @@ public class JSONToScenarioConverter {
         public int health = 0;
         public float speed = 0;
         public AI ai = null;
-        public String spriteName = "enemyShip32";
+        public String spriteName = "greenShip";
         public Sprite sprite;
 
         public boolean isValid() {
@@ -40,8 +40,8 @@ public class JSONToScenarioConverter {
             if (speed <= 0) {
                 return false;
             }
-            if (!(spriteName.equalsIgnoreCase("greenShip") ||
-                spriteName.equalsIgnoreCase("whiteShip"))) {
+            if (GameSettings.getInstance().getResourceLoader()
+                    .getResource(ResourceLoader.resourceIdFromName(spriteName)) == null) {
                 return false;
             }
 

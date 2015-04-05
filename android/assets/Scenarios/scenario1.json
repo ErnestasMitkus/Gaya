@@ -7,7 +7,7 @@
       "health" : 2,
       "speed" : 60,
       "ai" : "float",
-      "sprite" : "greenShip"
+      "sprite" : "blueShip"
     },
     {
       "name" : "shooter",
@@ -15,7 +15,7 @@
       "speed" : 60,
       "ai" : "shooter",
       "damage" : 3,
-      "sprite" : "whiteShip"
+      "sprite" : "blackShip"
     }
   ],
   "waves" : [
