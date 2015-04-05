@@ -8,13 +8,21 @@
       "speed" : 60,
       "ai" : "float",
       "sprite" : "greenShip"
+    },
+    {
+      "name" : "shooter",
+      "health" : 1,
+      "speed" : 60,
+      "ai" : "shooter",
+      "damage" : 3,
+      "sprite" : "greenShip"
     }
   ],
   "waves" : [
     {
       "id" : 0,
       "spawn" : [
-        ["simple", "MIDDLE", "0"],
+        ["shooter", "MIDDLE"              , "0"],
         ["simple", "MIDDLE - @simple * 2", "@simple * 2"],
         ["simple", "MIDDLE + @simple * 2", "@simple * 2"]
       ]
@@ -22,15 +30,29 @@
     {
       "id" : 1,
       "spawn" : [
-        ["simple", "MIDDLE", "0"],
-        ["simple", "MIDDLE - @simple * 2", "@simple * 2"],
-        ["simple", "MIDDLE + @simple * 2", "@simple * 2"],
+        ["simple", "MIDDLE"              , "0"],
+        ["shooter", "MIDDLE - @simple * 2", "@simple * 2"],
+        ["shooter", "MIDDLE + @simple * 2", "@simple * 2"],
         ["simple", "MIDDLE - @simple * 4", "@simple * 3"],
-        ["simple", "MIDDLE", "@simple * 3"],
+        ["simple", "MIDDLE"              , "@simple * 3"],
         ["simple", "MIDDLE + @simple * 4", "@simple * 3"]
       ],
       "powerup" : [
         ["firerate", "MIDDLE", "@simple * 2.5"]
+      ]
+    },
+    {
+      "id" : -2,
+      "spawn" : [
+        ["simple", "MIDDLE - @simple * 3", "0"],
+        ["simple", "MIDDLE - @simple * 3", "@simple * 3"],
+        ["simple", "MIDDLE - @simple * 3", "@simple * 6"],
+        ["simple", "MIDDLE"              , "0"],
+        ["simple", "MIDDLE"              , "@simple * 3"],
+        ["simple", "MIDDLE"              , "@simple * 6"],
+        ["simple", "MIDDLE + @simple * 3", "0"],
+        ["simple", "MIDDLE + @simple * 3", "@simple * 3"],
+        ["simple", "MIDDLE + @simple * 3", "@simple * 6"]
       ]
     }
   ]

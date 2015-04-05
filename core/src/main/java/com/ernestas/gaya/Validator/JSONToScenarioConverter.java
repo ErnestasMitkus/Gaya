@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.AI.AI;
 import com.ernestas.gaya.AI.FloatAI;
+import com.ernestas.gaya.AI.ShooterAI;
 import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.Gameplay.Scenario;
 import com.ernestas.gaya.Gameplay.Wave;
@@ -98,7 +99,7 @@ public class JSONToScenarioConverter {
         struct.name = obj.getString("name");
         struct.health = obj.getInt("health");
         struct.speed = (float) obj.getInt("speed");
-        struct.ai = parseAI(obj.getString("ai"));
+        struct.ai = parseAI(obj.getString("ai"), obj.optInt("damage", 1));
         struct.spriteName = obj.getString("sprite");
 
         if (GameSettings.getInstance().getResourceLoader() != null)
@@ -107,9 +108,11 @@ public class JSONToScenarioConverter {
         return struct;
     }
 
-    public static AI parseAI(String aiString) {
+    public static AI parseAI(String aiString, int damage) {
         if (aiString.equalsIgnoreCase("float")) {
             return new FloatAI();
+        } else if (aiString.equalsIgnoreCase("shooter")) {
+            return new ShooterAI(damage);
         }
 
         return null;
@@ -119,7 +122,9 @@ public class JSONToScenarioConverter {
         JSONArray wavesArray = obj.getJSONArray("waves");
         for (int i = 0; i < wavesArray.length(); ++i) {
             Wave wave = parseWave(map, wavesArray.getJSONObject(i));
-            scenario.addWave(wave);
+            if (wave != null) {
+                scenario.addWave(wave);
+            }
         }
     }
 
@@ -127,7 +132,14 @@ public class JSONToScenarioConverter {
     private static Wave parseWave(Map<String, EnemyStruct> map, JSONObject obj) throws JSONException {
         Wave.Builder waveBuilder = new Wave.Builder();
 
-        waveBuilder.withId(obj.getInt("id"));
+
+        int id = obj.getInt("id");
+
+        if (id < 0) {
+            return null;
+        } else {
+            waveBuilder.withId(obj.getInt("id"));
+        }
 
         JSONArray spawnArray = obj.getJSONArray("spawn");
         for (int i = 0; i < spawnArray.length(); ++i) {

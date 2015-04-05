@@ -8,6 +8,7 @@ import com.ernestas.gaya.Game.Level;
 import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
+import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.SimpleBullet;
 import com.ernestas.gaya.Util.Settings.GameSettings;
@@ -27,10 +28,7 @@ public class PlayerShip extends Ship {
     private int health = MAX_HEALTH;
     private float speed = DEFAULT_SPEED;
 
-    private float fireRate = 0.5f;
-    private float timePassedSinceLastShoot = fireRate;
-
-    private Arsenal arsenal;
+    private ArsenalWrapper arsenalWrapper;
 
     private int score;
 
@@ -41,7 +39,7 @@ public class PlayerShip extends Ship {
 
     public PlayerShip(Level level, Vector2f position) {
         super(level, position);
-        arsenal = new Arsenal(this);
+        arsenalWrapper = new ArsenalWrapper(new Arsenal(this), 0.5f);
     }
 
     public PlayerShip(Level level, Sprite sprite, Vector2f position) {
@@ -52,7 +50,7 @@ public class PlayerShip extends Ship {
     }
 
     public void restart() {
-        arsenal.resetBulletType();
+        arsenalWrapper.getArsenal().resetBulletType();
         score = 0;
         invulnerabilityTime = 0;
         health = MAX_HEALTH;
@@ -77,6 +75,7 @@ public class PlayerShip extends Ship {
     }
 
     public void update(InputProcessor input, float delta) {
+        arsenalWrapper.update(delta);
         if (!vulnerable()) {
             invulnerabilityTime -= delta;
             timeSinceLastBlinked += delta;
@@ -112,32 +111,22 @@ public class PlayerShip extends Ship {
 
 
         // Shooting
-        timePassedSinceLastShoot += delta;
-        if (input.isPressed(Input.Keys.SPACE) && canShoot()) {
-            shoot();
+        if (input.isPressed(Input.Keys.SPACE)) {
+            arsenalWrapper.shoot();
         }
 
         if (input.isPressedAdvanced(Input.Keys.NUMPAD_1)) {
-            arsenal.setBulletType(Arsenal.BulletType.singleBullet);
+            arsenalWrapper.getArsenal().setBulletType(Arsenal.BulletType.singleBullet);
         }
         if (input.isPressedAdvanced(Input.Keys.NUMPAD_2)) {
-            arsenal.setBulletType(Arsenal.BulletType.doubleBullet);
+            arsenalWrapper.getArsenal().setBulletType(Arsenal.BulletType.doubleBullet);
         }
         if (input.isPressedAdvanced(Input.Keys.NUMPAD_3)) {
-            arsenal.setBulletType(Arsenal.BulletType.tripleBullet);
+            arsenalWrapper.getArsenal().setBulletType(Arsenal.BulletType.tripleBullet);
         }
         if (input.isPressedAdvanced(Input.Keys.NUMPAD_4)) {
-            arsenal.setBulletType(Arsenal.BulletType.pentaBullet);
+            arsenalWrapper.getArsenal().setBulletType(Arsenal.BulletType.pentaBullet);
         }
-    }
-
-    private void shoot() {
-        timePassedSinceLastShoot = 0f;
-        arsenal.shoot();
-    }
-
-    private boolean canShoot() {
-        return timePassedSinceLastShoot >= fireRate;
     }
 
     private void move(float vecX, float vecY, float delta) {

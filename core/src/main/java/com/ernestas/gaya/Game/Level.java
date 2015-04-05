@@ -213,6 +213,7 @@ public class Level {
             bullet.update(delta);
             if (bullet.getBounds().overlaps(player.getBounds()) && !bullet.getAuthor().equals(player)) {
                 // hit player
+                player.hitFor(bullet.getDamage());
                 hit = true;
             } else {
                 for (int index = 0; index < enemyList.size(); ++index) {

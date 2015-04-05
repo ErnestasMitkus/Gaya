@@ -17,11 +17,18 @@ public class Arsenal {
 
     private Ship ship;
     private boolean isEnemyShip;
+    private int damage;
 
-    BulletType bulletType = BulletType.singleBullet;
+    BulletType bulletType;
 
     public Arsenal(Ship ship) {
+        this(ship, 1);
+    }
+
+    public Arsenal(Ship ship, int damage) {
         this.ship = ship;
+        this.damage = damage;
+        bulletType = BulletType.singleBullet;
         isEnemyShip = !(ship instanceof PlayerShip);
     }
 
@@ -72,11 +79,24 @@ public class Arsenal {
                 break;
         }
 
+        if (damage != 1) {
+            setDamageToAllBullets(bulletList, damage);
+        }
         ship.getLevel().addBullets(bulletList);
     }
 
+    private void setDamageToAllBullets(List<Bullet> bullets, int damage) {
+        for (int i = 0; i < bullets.size(); ++i) {
+            bullets.get(i).setDamage(damage);
+        }
+    }
+
     private void handleSingleBulletShot(List<Bullet> bullets) {
-        bullets.add(new SimpleBullet(ship, new Vector2f(ship.getBounds().getX(), ship.getBounds().getY()), new Vector2f(0, 1)));
+        if (!isEnemyShip) {
+            bullets.add(new SimpleBullet(ship, new Vector2f(ship.getBounds().getX(), ship.getBounds().getY()), new Vector2f(0, 1)));
+        } else {
+            bullets.add(new SimpleBullet(ship, new Vector2f(ship.getBounds().getX(), ship.getBounds().getY()), new Vector2f(0, -1)));
+        }
     }
 
     private void handleDoubleBulletShot(List<Bullet> bullets) {

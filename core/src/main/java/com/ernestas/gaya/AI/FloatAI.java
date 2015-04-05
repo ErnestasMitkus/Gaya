@@ -7,10 +7,11 @@ import com.ernestas.gaya.Util.Settings.Settings;
 
 public class FloatAI implements AI {
 
-    private Level level;
-    private EnemyShip ship;
-    private boolean initialized = false;
+    protected Level level;
+    protected EnemyShip ship;
+    protected boolean initialized = false;
 
+    @Override
     public void init(Level level, EnemyShip ship) {
         this.level = level;
         this.ship = ship;
@@ -19,13 +20,10 @@ public class FloatAI implements AI {
 
     @Override
     public void update(float delta) {
-        if (!initialized) {
-            System.err.println("UNINITIALIZED AI. EXPLODING SHIP");
-            ship.explode();
+        if (initialized) {
+            float flySpeed = ship.isExploding() ? -10f : ship.getSpeed();
+            ship.setPosition(ship.getPosition().x, ship.getPosition().y - flySpeed * delta * Settings.getInstance().getScale());
         }
-
-        float flySpeed = ship.isExploding() ? -10f : ship.getSpeed();
-        ship.setPosition(ship.getPosition().x, ship.getPosition().y - flySpeed * delta * Settings.getInstance().getScale());
     }
 
 
