@@ -40,7 +40,8 @@ public class JSONToScenarioConverter {
             if (speed <= 0) {
                 return false;
             }
-            if (!spriteName.equalsIgnoreCase("greenShip")) {
+            if (!(spriteName.equalsIgnoreCase("greenShip") ||
+                spriteName.equalsIgnoreCase("whiteShip"))) {
                 return false;
             }
 
