@@ -7,7 +7,7 @@
       "health" : 2,
       "speed" : 60,
       "ai" : "float",
-      "sprite" : "blueShip"
+      "sprite" : "greenShip"
     },
     {
       "name" : "shooter",

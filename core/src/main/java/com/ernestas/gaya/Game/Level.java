@@ -93,6 +93,11 @@ public class Level {
         // Background
         bg.render(batch);
 
+        // Bullets
+        for (Bullet bullet : bullets) {
+            bullet.getSprite().draw(batch);
+        }
+
         // Player
         player.getSprite().draw(batch);
 
@@ -101,11 +106,6 @@ public class Level {
         for (int index = 0; index < enemyList.size(); ++index) {
             EnemyShip enemy = enemyList.get(index).ship;
             enemy.getSprite().draw(batch);
-        }
-
-        // Bullets
-        for (Bullet bullet : bullets) {
-            bullet.getSprite().draw(batch);
         }
 
         hud.render(batch);
