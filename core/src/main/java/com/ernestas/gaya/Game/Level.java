@@ -34,6 +34,7 @@ public class Level {
 
     private HUD hud;
     private ScreenDimmer screenDimmer;
+    private boolean endingDimmer = false;
 
 //    Scenario
     private Scenario scenario;
@@ -117,7 +118,7 @@ public class Level {
         }
 
         hud.render(batch);
-        if (screenDimmer != null && !screenDimmer.done()) {
+        if (!screenDimmer.done() || endingDimmer) {
             screenDimmer.getSprite().draw(batch);
         }
 
@@ -180,15 +181,22 @@ public class Level {
             return;
         }
 
+        if (!screenDimmer.done()) {
+            screenDimmer.update(delta);
+        } else {
+            if (endingDimmer) {
+                System.out.println("GAME OVER");
+            }
+        }
+
         if (player.dead()) {
             // TODO: Dim the screen to 50%
             // TODO: Menu appears: restart \n exit
-            System.out.println("PLAYER IS DEAD");
+            if (!endingDimmer) {
+                screenDimmer = new ScreenDimmer(0f, 0.6f, 1.5f);
+                endingDimmer = true;
+            }
             return;
-        }
-
-        if (!screenDimmer.done()) {
-            screenDimmer.update(delta);
         }
 
         // Background

@@ -89,6 +89,10 @@ public class PlayerShip extends Ship {
     public void update(InputProcessor input, float delta) {
         super.update(delta);
 
+        if (isExploding() || exploded()) {
+            return;
+        }
+
         if (health <= 0) {
             exploding = true;
         }
