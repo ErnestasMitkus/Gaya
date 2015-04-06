@@ -13,6 +13,7 @@ import com.ernestas.gaya.Gameplay.Wave;
 import com.ernestas.gaya.GayaEntry;
 import com.ernestas.gaya.HUD.HUD;
 import com.ernestas.gaya.Input.InputProcessor;
+import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.EnemyShip;
@@ -40,7 +41,6 @@ public class Level {
 
 //    Background
     private LoopedBackground bg;
-    private float backgroundSpeed = 30f;
 
 //    Player
     private PlayerShip player;
@@ -68,7 +68,7 @@ public class Level {
 
         Sprite bgSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.background);
         bgSprite.setScale((Settings.getInstance().getWidth() / bgSprite.getWidth()), bgSprite.getScaleY());
-        bg = new LoopedBackground(new Sprite(bgSprite), -backgroundSpeed, false);
+        bg = new LoopedBackground(new Sprite(bgSprite), -GameSettings.getInstance().getGameSpeed(), false);
 
         restartLevel();
     }
@@ -92,6 +92,12 @@ public class Level {
     public void render(SpriteBatch batch) {
         // Background
         bg.render(batch);
+
+        // Powerups
+        for (Powerup powerup : currentWave.getPowerupList()) {
+            System.out.println(powerup.getPosition());
+            powerup.getSprite().draw(batch);
+        }
 
         // Bullets
         for (Bullet bullet : bullets) {
@@ -138,7 +144,10 @@ public class Level {
 
             // pickups
             renderer.setColor(Color.GREEN);
-
+            for (Powerup powerup : currentWave.getPowerupList()) {
+                rec = powerup.getBounds();
+                renderer.rect(rec.x, rec.y, rec.width, rec.height);
+            }
 
             renderer.end();
 
@@ -183,6 +192,22 @@ public class Level {
             for (Wave.EnemyWithOffset enemy : currentWave.getEnemyList()) {
                 enemy.ship.setLevel(this);
                 enemy.ship.getAI().init(this, enemy.ship);
+            }
+        }
+
+        // Powerup
+        List<Powerup> powerupList = currentWave.getPowerupList();
+        for (int i = 0; i < powerupList.size(); ++i) {
+            Powerup powerup = powerupList.get(i);
+            powerup.update(delta);
+
+            if (powerup.getBounds().overlaps(player.getBounds())) {
+                powerup.effect(this, player);
+            }
+
+            if (powerup.canRemove()) {
+                powerupList.remove(i);
+                --i;
             }
         }
 

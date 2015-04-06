@@ -16,7 +16,11 @@ public class ResourcesPather {
     public String shipBlack;
     public String shipBlue;
 
+    // Bullets
     public String simpleBullet;
+
+    // Powerups
+    public String powerupSS;
 
     // FX
     public String explosionSS;
@@ -46,6 +50,7 @@ public class ResourcesPather {
         resourcesPather.shipBlue = defaultPath + "blueShip.png";
         resourcesPather.explosionSS = defaultPath + "explosionSS.png";
         resourcesPather.simpleBullet = defaultPath + "bullets/simpleBullet.png";
+        resourcesPather.powerupSS = defaultPath + "powerupSS.png";
 
         return resourcesPather;
     }

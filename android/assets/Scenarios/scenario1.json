@@ -1,5 +1,5 @@
 {
-  "name": "test \"test\" test",
+  "name": "test \"test\" test \nNewLineTest",
   "author": "Ernestas",
   "enemies" : [
     {
@@ -22,23 +22,26 @@
     {
       "id" : 0,
       "spawn" : [
-        ["shooter", "MIDDLE"              , "0"],
+        ["shooter", "MIDDLE"             , "0"],
         ["simple", "MIDDLE - @simple * 2", "@simple * 2"],
         ["simple", "MIDDLE + @simple * 2", "@simple * 2"]
+      ],
+      "powerup" : [
+        ["bullet", "MIDDLE", "@simple"]
       ]
     },
     {
       "id" : 1,
       "spawn" : [
-        ["simple", "MIDDLE"              , "0"],
+        ["simple", "MIDDLE"               , "0"],
         ["shooter", "MIDDLE - @simple * 2", "@simple * 2"],
         ["shooter", "MIDDLE + @simple * 2", "@simple * 2"],
-        ["simple", "MIDDLE - @simple * 4", "@simple * 3"],
-        ["simple", "MIDDLE"              , "@simple * 3"],
-        ["simple", "MIDDLE + @simple * 4", "@simple * 3"]
+        ["simple", "MIDDLE - @simple * 4" , "@simple * 3"],
+        ["simple", "MIDDLE"               , "@simple * 3"],
+        ["simple", "MIDDLE + @simple * 4" , "@simple * 3"]
       ],
       "powerup" : [
-        ["firerate", "MIDDLE", "@simple * 2.5"]
+        ["health", "MIDDLE", "@simple"]
       ]
     },
     {

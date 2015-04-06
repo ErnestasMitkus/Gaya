@@ -8,6 +8,7 @@ import com.ernestas.gaya.AI.ShooterAI;
 import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.Gameplay.Scenario;
 import com.ernestas.gaya.Gameplay.Wave;
+import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Util.IntWrapper;
@@ -42,6 +43,31 @@ public class JSONToScenarioConverter {
             }
             if (GameSettings.getInstance().getResourceLoader()
                     .getResource(ResourceLoader.resourceIdFromName(spriteName)) == null) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    private static class PowerupStruct {
+        public String name = "";
+        public float x = 0;
+        public float y = 0;
+
+        public boolean isValid() {
+            if (! (name.equalsIgnoreCase("health") ||
+                    name.equalsIgnoreCase("bullet") ||
+                    name.equalsIgnoreCase("shield")) ) {
+                return false;
+            }
+
+
+            if (x < 0 || x > Settings.getInstance().getWidth()) {
+                return false;
+            }
+
+            if (y < 0) {
                 return false;
             }
 
@@ -142,48 +168,71 @@ public class JSONToScenarioConverter {
             waveBuilder.withId(obj.getInt("id"));
         }
 
-        JSONArray spawnArray = obj.getJSONArray("spawn");
-        for (int i = 0; i < spawnArray.length(); ++i) {
-            Wave.EnemyWithOffset enemy = new Wave.EnemyWithOffset(0, 0, null);
-            JSONArray spawnEvent = spawnArray.getJSONArray(i);
+        // Enemies
+        JSONArray spawnArray = obj.optJSONArray("spawn");
+        if (spawnArray != null) {
+            for (int i = 0; i < spawnArray.length(); ++i) {
+                Wave.EnemyWithOffset enemy = new Wave.EnemyWithOffset(0, 0, null);
+                JSONArray spawnEvent = spawnArray.getJSONArray(i);
 
 
+                if (!mapContainsKey(map, spawnEvent.getString(0))) {
+                    throw new JSONException("Undefined enemy: \"" + spawnEvent.getString(0) + "\".");
+                } else {
+                    EnemyStruct enemyStruct = map.get(spawnEvent.getString(0));
+                    float offsetX = evaluateExpression(spawnEvent.getString(1), map);
+                    float offsetY = evaluateExpression(spawnEvent.getString(2), map);
 
-            if (!mapContainsKey(map, spawnEvent.getString(0))) {
-                throw new JSONException("Undefined enemy: \"" + spawnEvent.getString(0) + "\".");
-            } else {
-                EnemyStruct enemyStruct = map.get(spawnEvent.getString(0));
-                float offsetX = evaluateExpression(spawnEvent.getString(1), map);
-                float offsetY = evaluateExpression(spawnEvent.getString(2), map);
+                    if (offsetY < 0) {
+                        throw new JSONException("offsetY is below 0");
+                    }
+                    if (offsetX > Settings.getInstance().getWidth()) {
+                        throw new JSONException("offsetX is out of screen bounds(" + Settings.getInstance().getWidth() + ")");
+                    }
+                    if (offsetX < 0) {
+                        throw new JSONException("offsetX cannot be below 0");
+                    }
 
-                if (offsetY < 0) {
-                    throw new JSONException("offsetY is below 0");
+                    // got offsets and enemyStruct
+                    enemy.offsetX = offsetX;
+                    enemy.offsetY = offsetY;
+
+                    enemy.ship = new EnemyShip.Builder()
+                        .withSpeed(enemyStruct.speed)
+                        .withHealth(enemyStruct.health)
+                        .withAI(enemyStruct.ai.clone())
+                        .withSprite(
+                            GameSettings.getInstance().getResourceLoader().getResource(
+                                ResourceLoader.resourceIdFromName(enemyStruct.spriteName)
+                            )
+                        )
+                        .build();
                 }
-                if (offsetX > Settings.getInstance().getWidth()) {
-                    throw new JSONException("offsetX is out of screen bounds(" + Settings.getInstance().getWidth() + ")");
-                }
-                if (offsetX < 0) {
-                    throw new JSONException("offsetX cannot be below 0");
-                }
-
-                // got offsets and enemyStruct
-                enemy.offsetX = offsetX;
-                enemy.offsetY = offsetY;
-
-                enemy.ship = new EnemyShip.Builder()
-                                .withSpeed(enemyStruct.speed)
-                                .withHealth(enemyStruct.health)
-                                .withAI(enemyStruct.ai.clone())
-                                .withSprite(
-                                    GameSettings.getInstance().getResourceLoader().getResource(
-                                        ResourceLoader.resourceIdFromName(enemyStruct.spriteName)
-                                    )
-                                )
-                                .build();
+                waveBuilder.withEnemy(enemy);
             }
-            waveBuilder.withEnemy(enemy);
         }
 
+
+        // Powerups
+        JSONArray powerupArray = obj.optJSONArray("powerup");
+        if (powerupArray != null) {
+            for (int i = 0; i < powerupArray.length(); ++i) {
+                JSONArray powerupEvent = powerupArray.getJSONArray(i);
+                PowerupStruct struct = new PowerupStruct();
+
+                struct.name = powerupEvent.getString(0);
+                struct.x = evaluateExpression(powerupEvent.getString(1), map);
+                struct.y = evaluateExpression(powerupEvent.getString(2), map);
+
+                if (struct.isValid()) {
+                    Powerup powerup = Powerup.getPowerupFromString(struct.name);
+                    powerup.setPosition(struct.x, struct.y);
+                    waveBuilder.withPowerup(powerup);
+                } else {
+                    System.out.println("POWERUP NOT VALID: name[" + struct.name + "] x[" + struct.x + "] y[" + struct.y + "]");
+                }
+            }
+        }
 
         return waveBuilder.build();
     }

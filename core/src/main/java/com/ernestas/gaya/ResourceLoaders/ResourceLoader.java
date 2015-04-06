@@ -26,6 +26,9 @@ public class ResourceLoader {
         // Bullets
         simpleBullet,
 
+        // Powerups
+        powerupSS, healthPowerup, bulletPowerup, shieldPowerup,
+
         // Effects
         explosionSS,
 
@@ -58,6 +61,7 @@ public class ResourceLoader {
             loadResource(ResourceId.shipBlue, pather.shipBlue);
             loadResource(ResourceId.explosionSS, pather.explosionSS, false);
             loadResource(ResourceId.simpleBullet, pather.simpleBullet);
+            loadResource(ResourceId.powerupSS, pather.powerupSS);
 
             loaded = true;
         } catch(Exception e) {
@@ -89,12 +93,33 @@ public class ResourceLoader {
             return null;
         }
 
+        if (id == ResourceId.bulletPowerup || id == ResourceId.healthPowerup || id == ResourceId.shieldPowerup) {
+            int x;
+            switch(id) {
+                case bulletPowerup:
+                    x = 0;
+                    break;
+                case healthPowerup:
+                    x = 32;
+                    break;
+                case shieldPowerup:
+                    x = 64;
+                    break;
+                default:
+                    x = 0;
+                    break;
+            }
+            Texture powerupTexture = spriteMap.get(ResourceId.powerupSS).getTexture();
+            return new Sprite(powerupTexture, x, 0, 32, 32);
+        }
+
         Sprite sprite = spriteMap.get(id);
         return new Sprite(sprite);
     }
 
     public static ResourceId resourceIdFromName(String resourceName) {
 
+        // Ships
         if (resourceName.equalsIgnoreCase("greenShip")) {
             return ResourceId.shipGreen;
         } else if (resourceName.equalsIgnoreCase("whiteShip")) {

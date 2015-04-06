@@ -157,10 +157,17 @@ public class PlayerShip extends Ship {
     public boolean dead() { return health <= 0; }
     public boolean vulnerable() { return invulnerabilityTime <= 0; }
 
+    public void heal(int amount) {
+        health = Math.min(MAX_HEALTH, health + amount);
+    }
     public int getHealth() { return health; }
     public int getMaxHealth() { return MAX_HEALTH; }
     public void addScore(int points) {
         score += points;
     }
     public int getScore() { return score; }
+
+    public Arsenal getArsenal() {
+        return arsenalWrapper.getArsenal();
+    }
 }

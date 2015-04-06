@@ -1,5 +1,6 @@
 package com.ernestas.gaya.Gameplay;
 
+import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Ships.Ship;
 import com.ernestas.gaya.Util.Settings.Settings;
@@ -30,7 +31,16 @@ public class Wave {
         }
 
         public Builder withEnemy(EnemyWithOffset enemy) {
-            wave.addEnemy(enemy);
+            if (enemy != null) {
+                wave.addEnemy(enemy);
+            }
+            return this;
+        }
+
+        public Builder withPowerup(Powerup powerup) {
+            if (powerup != null) {
+                wave.addPowerup(powerup);
+            }
             return this;
         }
 
@@ -40,11 +50,12 @@ public class Wave {
         }
 
         public Wave build() {
-            prepareEnemies();
+            prepareForBuild();
             return wave;
         }
 
-        private void prepareEnemies() {
+        private void prepareForBuild() {
+            // enemies
             for (int i = 0; i < wave.enemyList.size(); ++i) {
                 EnemyWithOffset enemy = wave.enemyList.get(i);
                 enemy.offsetY += Settings.getInstance().getHeight();
@@ -52,11 +63,17 @@ public class Wave {
 
                 enemy.ship.setPosition(enemy.offsetX, enemy.offsetY);
             }
+
+            // powerups
+            for (Powerup powerup : wave.powerupList) {
+                powerup.setPosition(powerup.getPosition().x, powerup.getPosition().y + Settings.getInstance().getHeight());
+            }
         }
 
     }
 
     private List<EnemyWithOffset> enemyList = new LinkedList<EnemyWithOffset>();
+    private List<Powerup> powerupList = new LinkedList<Powerup>();
     private int id;
 
     public static final Wave EMPTY_WAVE = new Wave.Builder()
@@ -72,11 +89,18 @@ public class Wave {
         }
     }
 
+    private void addPowerup(Powerup powerup) {
+        if (!powerupList.contains(powerup)) {
+            powerupList.add(powerup);
+        }
+    }
+
     public List<EnemyWithOffset> getEnemyList() { return enemyList; }
+    public List<Powerup> getPowerupList() { return powerupList; }
     public int getId() { return id; }
 
     public boolean waveCompleted() {
-        return enemyList.isEmpty();
+        return enemyList.isEmpty() && powerupList.isEmpty();
     }
 
 }
