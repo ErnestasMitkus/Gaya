@@ -51,7 +51,6 @@ public class EnemyShip extends Ship {
 
     }
 
-    private Animation explosionAnimation;
     private Sprite sprite;
     private int health;
     private float speed;
@@ -63,11 +62,7 @@ public class EnemyShip extends Ship {
     private AI ai;
 
     private EnemyShip() {
-        this.sprite = null;
-        this.health = 0;
-        this.speed = 0f;
-        ai = null;
-        init();
+        this(null, 0, 0f, null);
     }
 
     public EnemyShip(Sprite sprite, int health, float speed, AI ai) {
@@ -75,17 +70,11 @@ public class EnemyShip extends Ship {
         this.health = health;
         this.speed = speed;
         this.ai = ai;
-        init();
-    }
-
-    private void init() {
-        Spritesheet spritesheet = new Spritesheet(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.explosionSS).getTexture(),
-            32, 32, 14);
-        explosionAnimation = new Animation(spritesheet, (int) position.x, (int) position.y, 8, Animation.frameRateToDeltaRate(Settings.getInstance().getFrameRate()));
     }
 
     public void update(float delta) {
-        //TODO: AI
+        super.update(delta);
+
         if (ai != null) {
             ai.update(delta);
         }
@@ -94,20 +83,13 @@ public class EnemyShip extends Ship {
             exploding = true;
         }
 
-        if (exploding) {
-            explosionAnimation.update(delta);
-            if (explosionAnimation.iterationDone()) {
-                canRemove = explosionAnimation.iterationDone();
-            }
-        }
-
         if (getPosition().y + sprite.getHeight() < 0) {
             canRemove = true;
         }
     }
 
     public boolean canRemove() {
-        return canRemove;
+        return canRemove || exploded();
     }
 
     public Sprite getSprite() {

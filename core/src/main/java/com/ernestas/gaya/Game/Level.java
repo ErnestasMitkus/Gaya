@@ -95,7 +95,6 @@ public class Level {
 
         // Powerups
         for (Powerup powerup : currentWave.getPowerupList()) {
-            System.out.println(powerup.getPosition());
             powerup.getSprite().draw(batch);
         }
 
@@ -176,6 +175,8 @@ public class Level {
         }
 
         if (player.dead()) {
+            // TODO: Dim the screen to 50%
+            // TODO: Menu appears: restart \n exit
             System.out.println("PLAYER IS DEAD");
             return;
         }

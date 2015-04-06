@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.Game.Level;
 import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
+import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
 import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
@@ -57,24 +58,41 @@ public class PlayerShip extends Ship {
     }
 
     public Sprite getSprite() {
-        if (sprite != null) {
-            sprite.setPosition(position.x - bounds.getWidth() / 2, position.y - bounds.getHeight() / 2);
-        }
+        Sprite result;
+        if (exploding) {
+            result  = explosionAnimation.getSprite();
 
-        if (!vulnerable()) {
-            if (timeSinceLastBlinked >= blinkPeriod) {
-                timeSinceLastBlinked -= blinkPeriod;
-                visible = !visible;
+            float percentage = (1 - explosionAnimation.percentageDone()) * 100;
+
+            result = SpriteScaler.lowerSpriteZAxis(result, percentage);
+        } else {
+            if (!vulnerable()) {
+                if (timeSinceLastBlinked >= blinkPeriod) {
+                    timeSinceLastBlinked -= blinkPeriod;
+                    visible = !visible;
+                }
+            }
+            if (visible) {
+                result = sprite;
+            } else {
+                result = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.emptySprite);
             }
         }
-        if (visible) {
-            return sprite;
-        } else {
-            return GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.emptySprite);
+
+        if (result != null) {
+            result.setPosition(position.x - bounds.getWidth() / 2, position.y - bounds.getHeight() / 2);
         }
+
+        return result;
     }
 
     public void update(InputProcessor input, float delta) {
+        super.update(delta);
+
+        if (health <= 0) {
+            exploding = true;
+        }
+
         arsenalWrapper.update(delta);
         if (!vulnerable()) {
             invulnerabilityTime -= delta;
@@ -154,7 +172,7 @@ public class PlayerShip extends Ship {
         }
     }
 
-    public boolean dead() { return health <= 0; }
+    public boolean dead() { return health <= 0 && exploded(); }
     public boolean vulnerable() { return invulnerabilityTime <= 0; }
 
     public void heal(int amount) {

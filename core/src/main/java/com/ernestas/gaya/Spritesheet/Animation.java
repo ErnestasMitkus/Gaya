@@ -1,6 +1,8 @@
 package com.ernestas.gaya.Spritesheet;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
+import com.ernestas.gaya.Util.Settings.GameSettings;
 
 public class Animation {
 
@@ -32,7 +34,11 @@ public class Animation {
     }
 
     public Sprite getSprite() {
-        return spritesheet.getSprite(currentAnimation);
+        if (!iterationDone) {
+            return spritesheet.getSprite(currentAnimation);
+        } else {
+            return GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.emptySprite);
+        }
     }
 
     public void setPosition(int posX, int posY) {

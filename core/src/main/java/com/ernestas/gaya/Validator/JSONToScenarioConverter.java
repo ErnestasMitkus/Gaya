@@ -229,7 +229,7 @@ public class JSONToScenarioConverter {
                     powerup.setPosition(struct.x, struct.y);
                     waveBuilder.withPowerup(powerup);
                 } else {
-                    System.out.println("POWERUP NOT VALID: name[" + struct.name + "] x[" + struct.x + "] y[" + struct.y + "]");
+                    throw new JSONException("powerup is not valid: name[" + struct.name + "] x[" + struct.x + "] y[" + struct.y + "]");
                 }
             }
         }
