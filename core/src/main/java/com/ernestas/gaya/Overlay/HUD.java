@@ -1,4 +1,4 @@
-package com.ernestas.gaya.HUD;
+package com.ernestas.gaya.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ernestas.gaya.Game.Level;
 import com.ernestas.gaya.Util.Settings.Settings;
-
-import java.awt.*;
 
 public class HUD {
 

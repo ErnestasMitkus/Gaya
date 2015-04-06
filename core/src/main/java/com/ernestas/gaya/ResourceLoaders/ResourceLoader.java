@@ -2,6 +2,7 @@ package com.ernestas.gaya.ResourceLoaders;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -32,8 +33,8 @@ public class ResourceLoader {
         // Effects
         explosionSS,
 
-        // Empty sprite
-        emptySprite
+        // template sprites
+        emptySprite, blackSprite
     }
 
     ResourcesPather pather;
@@ -87,6 +88,14 @@ public class ResourceLoader {
     public Sprite getResource(ResourceId id) {
         if (id == ResourceId.emptySprite) {
             return new Sprite(new Texture(new Pixmap(0, 0, Pixmap.Format.RGBA8888)));
+        } else if (id == ResourceId.blackSprite) {
+            Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            pixmap.setColor(Color.BLACK);
+            pixmap.drawPixel(0, 0);
+
+            Sprite sprite = new Sprite(new Texture(pixmap));
+            sprite.setOrigin(0, 0);
+            return sprite;
         }
 
         if (loaded == false) {

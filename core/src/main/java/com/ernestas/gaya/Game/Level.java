@@ -11,8 +11,9 @@ import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.Gameplay.Scenario;
 import com.ernestas.gaya.Gameplay.Wave;
 import com.ernestas.gaya.GayaEntry;
-import com.ernestas.gaya.HUD.HUD;
+import com.ernestas.gaya.Overlay.HUD;
 import com.ernestas.gaya.Input.InputProcessor;
+import com.ernestas.gaya.Overlay.ScreenDimmer;
 import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
@@ -32,6 +33,7 @@ public class Level {
     private InputProcessor input;
 
     private HUD hud;
+    private ScreenDimmer screenDimmer;
 
 //    Scenario
     private Scenario scenario;
@@ -77,6 +79,7 @@ public class Level {
         paused = false;
         currentWave = Wave.EMPTY_WAVE;
         bullets.clear();
+        screenDimmer = new ScreenDimmer(1f, 0f, 1f);
         player.restart();
 
 //        scenario = Scenario.getTestScenario();
@@ -114,6 +117,9 @@ public class Level {
         }
 
         hud.render(batch);
+        if (screenDimmer != null && !screenDimmer.done()) {
+            screenDimmer.getSprite().draw(batch);
+        }
 
         if (debug) {
             batch.end();
@@ -179,6 +185,10 @@ public class Level {
             // TODO: Menu appears: restart \n exit
             System.out.println("PLAYER IS DEAD");
             return;
+        }
+
+        if (!screenDimmer.done()) {
+            screenDimmer.update(delta);
         }
 
         // Background
