@@ -2,6 +2,7 @@ package com.ernestas.gaya.Input;
 
 import com.badlogic.gdx.Input;
 import com.ernestas.gaya.Util.Settings.Settings;
+import com.ernestas.gaya.Util.Vectors.Vector2f;
 
 public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
@@ -11,7 +12,9 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
     private int keys[] = new int[256];
 
-    boolean isAndroid = false;
+    private boolean isAndroid = false;
+    private boolean mouseDown;
+    private Vector2f mousePos = new Vector2f();
 
     public InputProcessor(boolean isAndroid) {
         this.isAndroid = isAndroid;
@@ -39,6 +42,7 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        mouseDown = true;
         if (isAndroid) {
             if (screenX < Settings.getInstance().getWidth() / 2) {
                 if (keys[Input.Keys.A] == KEY_UP) {
@@ -64,6 +68,7 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        mouseDown = false;
         if (isAndroid) {
             keys[Input.Keys.A] = KEY_UP;
             keys[Input.Keys.D] = KEY_UP;
@@ -75,6 +80,9 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        mouseDown = true;
+        mousePos.x = screenX;
+        mousePos.y = Settings.getInstance().getHeight() - screenY;
         if (isAndroid) {
             if (screenX < Settings.getInstance().getWidth() / 2) {
                 if (keys[Input.Keys.A] == KEY_UP) {
@@ -100,6 +108,8 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        mousePos.x = screenX;
+        mousePos.y = Settings.getInstance().getHeight() - screenY;
         return false;
     }
 
@@ -125,5 +135,8 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
         keys[keycode] = KEY_HOLD;
         return result;
     }
+
+    public boolean mouseDown() { return mouseDown; }
+    public Vector2f getMousePos() { return mousePos; }
 
 }

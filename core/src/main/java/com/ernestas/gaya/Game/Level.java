@@ -16,6 +16,9 @@ import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.Overlay.ScreenDimmer;
 import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
+import com.ernestas.gaya.Screens.Overlays.Callbacks.LevelCallback;
+import com.ernestas.gaya.Screens.Overlays.EndGameOverlay;
+import com.ernestas.gaya.Screens.Overlays.Items.RectangleItem;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Ships.PlayerShip;
@@ -34,7 +37,7 @@ public class Level {
 
     private HUD hud;
     private ScreenDimmer screenDimmer;
-    private boolean endingDimmer = false;
+    private boolean endingDimmer;
 
 //    Scenario
     private Scenario scenario;
@@ -51,6 +54,9 @@ public class Level {
 //    Bullets
     private List<Bullet> bullets = new ArrayList<Bullet>();
 
+    // Overlays
+    private EndGameOverlay endGameOverlay;
+
     // Debug
     private boolean debug;
     private boolean paused;
@@ -65,6 +71,11 @@ public class Level {
     // Should be only called once
     public void setup() {
         //TODO: do stuff
+
+        endGameOverlay = new EndGameOverlay(this);
+        endGameOverlay.addItem(new RectangleItem(LevelCallback.RESTART_LEVEL, new Vector2f(50, 475), new LevelCallback(this)));
+        endGameOverlay.addItem(new RectangleItem(LevelCallback.EXIT_TO_MENU, new Vector2f(50, 300), new LevelCallback(this)));
+        endGameOverlay.setFadeIn(1f);
 
         Sprite playerSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipPlayer);
         player = new PlayerShip(this, playerSprite, new Vector2f(Settings.getInstance().getWidth() / 2, 100));
@@ -82,6 +93,8 @@ public class Level {
         bullets.clear();
         screenDimmer = new ScreenDimmer(1f, 0f, 1f);
         player.restart();
+        endingDimmer = false;
+        endGameOverlay.reset();
 
 //        scenario = Scenario.getTestScenario();
         try {
@@ -111,15 +124,18 @@ public class Level {
         player.getSprite().draw(batch);
 
         // Enemies
-        List<Wave.EnemyWithOffset> enemyList = currentWave.getEnemyList();
-        for (int index = 0; index < enemyList.size(); ++index) {
-            EnemyShip enemy = enemyList.get(index).ship;
+        for (Wave.EnemyWithOffset anEnemyList : currentWave.getEnemyList()) {
+            EnemyShip enemy = anEnemyList.ship;
             enemy.getSprite().draw(batch);
         }
 
         hud.render(batch);
         if (!screenDimmer.done() || endingDimmer) {
             screenDimmer.getSprite().draw(batch);
+        }
+
+        if (showEndMenu()) {
+            endGameOverlay.render(batch);
         }
 
         if (debug) {
@@ -135,9 +151,8 @@ public class Level {
 
             // enemies
             renderer.setColor(Color.BLUE);
-            for (int index = 0; index < enemyList.size(); ++index) {
-                EnemyShip enemy = enemyList.get(index).ship;
-                rec = enemy.getSprite().getBoundingRectangle();
+            for (Wave.EnemyWithOffset anEnemyList : currentWave.getEnemyList()) {
+                rec = anEnemyList.ship.getSprite().getBoundingRectangle();
                 renderer.rect(rec.x, rec.y, rec.width, rec.height);
             }
 
@@ -153,6 +168,12 @@ public class Level {
             for (Powerup powerup : currentWave.getPowerupList()) {
                 rec = powerup.getBounds();
                 renderer.rect(rec.x, rec.y, rec.width, rec.height);
+            }
+
+            // endGameOverlay
+            if (showEndMenu()) {
+                renderer.setColor(Color.CYAN);
+                endGameOverlay.renderBounds(renderer);
             }
 
             renderer.end();
@@ -176,22 +197,23 @@ public class Level {
                 ship.ship.explode();
             }
         }
+        if (input.isPressedAdvanced(Input.Keys.K)) {
+            player.hitFor(player.getHealth());
+        }
 
         if (paused) {
             return;
         }
 
+        if (showEndMenu()) {
+            endGameOverlay.update(delta);
+        }
+
         if (!screenDimmer.done()) {
             screenDimmer.update(delta);
-        } else {
-            if (endingDimmer) {
-                System.out.println("GAME OVER");
-            }
         }
 
         if (player.dead()) {
-            // TODO: Dim the screen to 50%
-            // TODO: Menu appears: restart \n exit
             if (!endingDimmer) {
                 screenDimmer = new ScreenDimmer(0f, 0.6f, 1.5f);
                 endingDimmer = true;
@@ -260,8 +282,8 @@ public class Level {
                 player.hitFor(bullet.getDamage());
                 hit = true;
             } else {
-                for (int index = 0; index < enemyList.size(); ++index) {
-                    EnemyShip enemy = enemyList.get(index).ship;
+                for (Wave.EnemyWithOffset anEnemyList : enemyList) {
+                    EnemyShip enemy = anEnemyList.ship;
 
                     if (bullet.getBounds().overlaps(enemy.getBounds()) && bullet.getAuthor().equals(player) &&
                         !enemy.isExploding()) {
@@ -293,4 +315,6 @@ public class Level {
     }
 
     public PlayerShip getPlayer() { return player; }
+    public InputProcessor getInput() { return input; }
+    private boolean showEndMenu() { return endingDimmer && screenDimmer.done(); }
 }

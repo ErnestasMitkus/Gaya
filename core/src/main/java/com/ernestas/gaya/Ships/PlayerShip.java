@@ -55,6 +55,8 @@ public class PlayerShip extends Ship {
         score = 0;
         invulnerabilityTime = 0;
         health = MAX_HEALTH;
+        exploding = false;
+        explodingDone = false;
     }
 
     public Sprite getSprite() {
