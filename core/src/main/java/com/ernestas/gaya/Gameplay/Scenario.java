@@ -1,5 +1,6 @@
 package com.ernestas.gaya.Gameplay;
 
+import com.ernestas.gaya.AI.FloatAI;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Util.Settings.GameSettings;
@@ -28,10 +29,15 @@ public class Scenario {
     }
 
     public Wave getNextWave() {
+        return getNextWave(null);
+    }
+
+    public Wave getNextWave(Wave lastWave) {
         Wave wave = Wave.EMPTY_WAVE;
         if (!waves.isEmpty()) {
             wave = waves.get(0);
             waves.remove(0);
+            wave.getPowerupList().addAll(lastWave.getPowerupList());
         }
         return wave;
     }
@@ -79,18 +85,21 @@ public class Scenario {
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle - 64, 64, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle + 64, 64, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .build()
             ;
@@ -103,36 +112,42 @@ public class Scenario {
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle - 64, 64, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle + 64, 64, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle - 128, 96, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle, 96, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .withEnemy(new Wave.EnemyWithOffset(
                 middle + 128, 96, new EnemyShip.Builder()
                 .withSprite(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipGreen))
                 .withHealth(1)
                 .withSpeed(60f)
+                .withAI(new FloatAI())
                 .build()))
             .build()
             ;

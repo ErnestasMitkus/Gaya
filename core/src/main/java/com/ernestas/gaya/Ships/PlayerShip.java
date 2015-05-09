@@ -1,23 +1,16 @@
 package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
 import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
-import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
-import com.ernestas.gaya.Ships.Arsenal.Bullets.SimpleBullet;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerShip extends Ship {
 
@@ -57,6 +50,7 @@ public class PlayerShip extends Ship {
         health = MAX_HEALTH;
         exploding = false;
         explodingDone = false;
+        explosionAnimation.restart();
     }
 
     public Sprite getSprite() {
@@ -135,7 +129,7 @@ public class PlayerShip extends Ship {
 
 
         // Shooting
-        if (input.isPressed(Input.Keys.SPACE)) {
+        if (Settings.getInstance().getAutoShoot() || input.isPressed(Input.Keys.SPACE)) {
             arsenalWrapper.shoot();
         }
 

@@ -24,6 +24,8 @@ public class Wave {
     }
 
     public static class Builder {
+        private static final float OFFSET_Y = 32f;
+
         private Wave wave;
 
         public Builder() {
@@ -55,18 +57,19 @@ public class Wave {
         }
 
         private void prepareForBuild() {
+            float scale = Settings.getInstance().getScale();
             // enemies
             for (int i = 0; i < wave.enemyList.size(); ++i) {
                 EnemyWithOffset enemy = wave.enemyList.get(i);
                 enemy.offsetY += Settings.getInstance().getHeight();
                 //enemy.offsetX += Settings.getInstance().getWidth() / 2;
 
-                enemy.ship.setPosition(enemy.offsetX, enemy.offsetY);
+                enemy.ship.setPosition(enemy.offsetX, enemy.offsetY + OFFSET_Y * scale);
             }
 
             // powerups
             for (Powerup powerup : wave.powerupList) {
-                powerup.setPosition(powerup.getPosition().x, powerup.getPosition().y + Settings.getInstance().getHeight());
+                powerup.setPosition(powerup.getPosition().x, powerup.getPosition().y + Settings.getInstance().getHeight() + OFFSET_Y * scale);
             }
         }
 
@@ -95,12 +98,21 @@ public class Wave {
         }
     }
 
+    public void offsetBy(float y) {
+        for (EnemyWithOffset enemy : enemyList) {
+            enemy.ship.setPosition(enemy.ship.getPosition().x, enemy.ship.getPosition().y + y);
+        }
+        for (Powerup powerup : powerupList) {
+            powerup.setPosition(powerup.getPosition().x, powerup.getPosition().y + y);
+        }
+    }
+
     public List<EnemyWithOffset> getEnemyList() { return enemyList; }
     public List<Powerup> getPowerupList() { return powerupList; }
     public int getId() { return id; }
 
     public boolean waveCompleted() {
-        return enemyList.isEmpty() && powerupList.isEmpty();
+        return enemyList.isEmpty();
     }
 
 }

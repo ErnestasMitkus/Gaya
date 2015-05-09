@@ -1,7 +1,7 @@
 package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Spritesheet.Animation;
 import com.ernestas.gaya.Spritesheet.Spritesheet;

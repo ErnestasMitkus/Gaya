@@ -8,10 +8,10 @@ public class Animation {
 
     private Spritesheet spritesheet;
     private int frequency;
-    private float deltaBucket = 0;
+    private float deltaBucket;
     private float framesPerSecond;
 
-    private int currentAnimation = 0;
+    private int currentAnimation;
     private boolean iterationDone;
 
     public Animation(Spritesheet spritesheet, int posX, int posY, int frequency, float framesPerSecond) {
@@ -19,6 +19,13 @@ public class Animation {
         setPosition(posX, posY);
         this.frequency = frequency;
         this.framesPerSecond = framesPerSecond;
+        restart();
+    }
+
+    public void restart() {
+        deltaBucket = 0;
+        currentAnimation = 0;
+        iterationDone = false;
     }
 
     public void update(float delta) {

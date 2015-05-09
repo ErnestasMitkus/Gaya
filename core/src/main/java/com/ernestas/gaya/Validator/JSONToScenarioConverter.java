@@ -11,6 +11,7 @@ import com.ernestas.gaya.Gameplay.Wave;
 import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.EnemyShip;
+import com.ernestas.gaya.Util.FileStringifier;
 import com.ernestas.gaya.Util.IntWrapper;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
@@ -18,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +81,7 @@ public class JSONToScenarioConverter {
     private JSONToScenarioConverter() {}
 
     public static Scenario convertFromFile(String path) throws GayaException {
-        String str = new Validator(path).fileToString();
+        String str = FileStringifier.fileToString(path);
 
         return convert(str);
     }

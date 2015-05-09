@@ -6,6 +6,7 @@ public class ResourcesPather {
     public String splash;
     public String background;
     public String cloud;
+    public String menuButton;
 
     // Player Ship
     public String shipPlayer;
@@ -51,6 +52,7 @@ public class ResourcesPather {
         resourcesPather.explosionSS = defaultPath + "explosionSS.png";
         resourcesPather.simpleBullet = defaultPath + "bullets/simpleBullet.png";
         resourcesPather.powerupSS = defaultPath + "powerupSS.png";
+        resourcesPather.menuButton = defaultPath + "menuButton.png";
 
         return resourcesPather;
     }

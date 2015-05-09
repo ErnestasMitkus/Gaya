@@ -1,7 +1,6 @@
 package com.ernestas.gaya.Powerups;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.PlayerShip;
 import com.ernestas.gaya.Util.Settings.GameSettings;

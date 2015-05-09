@@ -26,6 +26,7 @@ public class Settings {
     private int height = DEFAULT_HEIGHT;
     private float scale = 1f;
     private int frameRate = 60;
+    private boolean autoShoot = false;
 
     public int getWidth() {
         return width;
@@ -48,4 +49,6 @@ public class Settings {
     public int getFrameRate() { return frameRate; }
     public void setFrameRate(int frameRate) { this.frameRate = frameRate; }
 
+    public boolean getAutoShoot() { return autoShoot; }
+    public void setAutoShoot(boolean autoShoot) { this.autoShoot = autoShoot; }
 }

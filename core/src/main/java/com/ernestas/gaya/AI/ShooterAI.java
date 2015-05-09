@@ -1,6 +1,6 @@
 package com.ernestas.gaya.AI;
 
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
 import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
 import com.ernestas.gaya.Ships.EnemyShip;

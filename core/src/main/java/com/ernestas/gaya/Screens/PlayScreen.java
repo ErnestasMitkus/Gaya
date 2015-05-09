@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.GayaEntry;
 import com.ernestas.gaya.Input.InputProcessor;
 
@@ -27,7 +27,6 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(input);
         level.setup();
     }
 
@@ -50,12 +49,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void pause() {
-
+        level.pause();
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override

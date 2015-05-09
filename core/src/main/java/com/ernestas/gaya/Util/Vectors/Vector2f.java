@@ -37,4 +37,8 @@ public class Vector2f {
     public String toString() {
         return x + "," + y;
     }
+
+    public Vector2f scale(float scale) {
+        return new Vector2f(this.x * scale, this.y * scale);
+    }
 }

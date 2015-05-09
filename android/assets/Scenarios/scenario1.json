@@ -45,7 +45,7 @@
       ]
     },
     {
-      "id" : -2,
+      "id" : 2,
       "spawn" : [
         ["simple", "MIDDLE - @simple * 3", "0"],
         ["simple", "MIDDLE - @simple * 3", "@simple * 3"],

@@ -18,7 +18,7 @@ public class ResourceLoader {
         splash,
 
         // Background
-        background, cloud,
+        background, cloud, menuButton,
 
         // Ships
         shipPlayer, shipGreen, shipWhite,
@@ -63,6 +63,7 @@ public class ResourceLoader {
             loadResource(ResourceId.explosionSS, pather.explosionSS, false);
             loadResource(ResourceId.simpleBullet, pather.simpleBullet);
             loadResource(ResourceId.powerupSS, pather.powerupSS);
+            loadResource(ResourceId.menuButton, pather.menuButton);
 
             loaded = true;
         } catch(Exception e) {

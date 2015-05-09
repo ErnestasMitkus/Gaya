@@ -36,8 +36,8 @@ public class SplashScreen implements Screen {
         batch = new SpriteBatch();
 
         sprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.splash);
-        sprite.setPosition(Settings.getInstance().getWidth() / 2 - sprite.getWidth() / 2,
-                            Settings.getInstance().getHeight() / 2 - sprite.getHeight() / 2);
+        sprite.setPosition(Settings.getInstance().getWidth() / 2 - sprite.getBoundingRectangle().width / 2,
+                            Settings.getInstance().getHeight() / 2 - sprite.getBoundingRectangle().height / 2);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SplashScreen implements Screen {
 
     public void update(float delta) {
         if ((alpha == 0 && !up) || (alpha == 1 && !bounce)) {
-            gaya.setScreen(new PlayScreen(gaya));
+            gaya.setScreen(new MenuScreen(gaya));
             return;
         }
 

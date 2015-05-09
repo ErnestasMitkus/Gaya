@@ -1,12 +1,12 @@
 package com.ernestas.gaya.Overlay;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
+import com.ernestas.gaya.Util.Fonts.FontFactory;
 import com.ernestas.gaya.Util.Settings.Settings;
 
 public class HUD {
@@ -18,7 +18,7 @@ public class HUD {
         this.level = level;
 
         // Move to font factory
-        font = new BitmapFont(Gdx.files.internal("Fonts/calibri.fnt"), Gdx.files.internal("Fonts/calibri.png"), false);
+        font = FontFactory.getInstance().getFont(FontFactory.FontId.Calibri);
     }
 
     public void render(SpriteBatch batch) {

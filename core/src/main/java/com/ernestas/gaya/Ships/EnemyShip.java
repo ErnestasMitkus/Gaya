@@ -2,13 +2,7 @@ package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.AI.AI;
-import com.ernestas.gaya.Game.Level;
-import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
-import com.ernestas.gaya.Spritesheet.Animation;
-import com.ernestas.gaya.Spritesheet.Spritesheet;
-import com.ernestas.gaya.Util.Settings.GameSettings;
-import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
 public class EnemyShip extends Ship {

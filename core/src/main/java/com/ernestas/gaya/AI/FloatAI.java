@@ -1,7 +1,6 @@
 package com.ernestas.gaya.AI;
 
-import com.ernestas.gaya.Exceptions.GayaException;
-import com.ernestas.gaya.Game.Level;
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Util.Settings.Settings;
 

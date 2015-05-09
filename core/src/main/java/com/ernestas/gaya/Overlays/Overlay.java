@@ -1,4 +1,4 @@
-package com.ernestas.gaya.Screens.Overlays;
+package com.ernestas.gaya.Overlays;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
