@@ -6,11 +6,8 @@ import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.GlobalLoader;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.ResourcesPather;
-import com.ernestas.gaya.Screens.ErrorScreen;
-import com.ernestas.gaya.Screens.MenuScreen;
-import com.ernestas.gaya.Screens.PlayScreen;
+import com.ernestas.gaya.Screens.*;
 
-import com.ernestas.gaya.Screens.SplashScreen;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 
@@ -72,11 +69,13 @@ public class GayaEntry extends Game {
 
             // Global loaders
             // Move to after splash?
-            GlobalLoader.load();
+//            GlobalLoader.load();
 
             // Move to level?
-            GameSettings.getInstance().setResourceLoader(new ResourceLoader(ResourcesPather.defaultResourcesPather()));
-            GameSettings.getInstance().getResourceLoader().load();
+//            GameSettings.getInstance().setResourceLoader(new ResourceLoader(ResourcesPather.defaultResourcesPather()));
+//            GameSettings.getInstance().getResourceLoader().load();
+
+            GlobalLoader.loadInitial();
 
             if (startScreen != null) {
                 if (startScreen.equalsIgnoreCase("PLAY")) {
@@ -90,6 +89,7 @@ public class GayaEntry extends Game {
 
 //            setScreen(new ErrorScreen());
             setScreen(new SplashScreen(this));
+//            setScreen(new LoadingScreen(this));
 //            setScreen(new MenuScreen(this));
 //            setScreen(new PlayScreen(this));
             }

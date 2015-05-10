@@ -71,7 +71,7 @@ public class ErrorScreen implements Screen {
 
         font.setColor(Color.WHITE);
         if (e != null) {
-            font.drawWrapped(batch, e.getMessage(), 10, 10, 300);
+            font.drawWrapped(batch, e.getMessage(), 10, 150, 300);
         } else {
             float accelX = Gdx.input.getAccelerometerX();
             float accelY = Gdx.input.getAccelerometerY();

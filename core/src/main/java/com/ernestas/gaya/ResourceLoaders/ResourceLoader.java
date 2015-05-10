@@ -39,13 +39,22 @@ public class ResourceLoader {
 
     ResourcesPather pather;
     HashMap<ResourceId, Sprite> spriteMap = new HashMap<ResourceId, Sprite>();
-    boolean loaded = false;
 
     public ResourceLoader(ResourcesPather pather) {
         if (pather != null) {
             this.pather = pather;
         } else {
             this.pather = ResourcesPather.defaultResourcesPather();
+        }
+    }
+
+    public void loadInitial() {
+        spriteMap.clear();
+        try {
+            loadResource(ResourceId.splash, pather.splash);
+        } catch(Exception e) {
+            e.printStackTrace(); // Handle it somehow different?
+//            throw e;
         }
     }
 
@@ -64,8 +73,6 @@ public class ResourceLoader {
             loadResource(ResourceId.simpleBullet, pather.simpleBullet);
             loadResource(ResourceId.powerupSS, pather.powerupSS);
             loadResource(ResourceId.menuButton, pather.menuButton);
-
-            loaded = true;
         } catch(Exception e) {
             e.printStackTrace(); // Handle it somehow different?
 //            throw e;
@@ -99,10 +106,6 @@ public class ResourceLoader {
             return sprite;
         }
 
-        if (loaded == false) {
-            return null;
-        }
-
         if (id == ResourceId.bulletPowerup || id == ResourceId.healthPowerup || id == ResourceId.shieldPowerup) {
             int x;
             switch(id) {
@@ -124,6 +127,9 @@ public class ResourceLoader {
         }
 
         Sprite sprite = spriteMap.get(id);
+        if (sprite == null) {
+            return null;
+        }
         return new Sprite(sprite);
     }
 

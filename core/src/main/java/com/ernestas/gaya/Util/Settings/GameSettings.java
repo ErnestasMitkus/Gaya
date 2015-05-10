@@ -1,5 +1,6 @@
 package com.ernestas.gaya.Util.Settings;
 
+import com.ernestas.gaya.ResourceLoaders.AnimationLoader;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 
 public class GameSettings {
@@ -21,6 +22,7 @@ public class GameSettings {
     /********************************************************/
 
     private ResourceLoader resourceLoader;
+    private AnimationLoader animationLoader;
     private float gameSpeed = DEFAULT_GAME_SPEED;
 
     public ResourceLoader getResourceLoader() {
@@ -30,8 +32,14 @@ public class GameSettings {
         this.resourceLoader = resourceLoader;
     }
 
-    public float getGameSpeed() { return gameSpeed; }
+    public AnimationLoader getAnimationLoader() {
+        return animationLoader;
+    }
+    public void setAnimationLoader(AnimationLoader animationLoader) {
+        this.animationLoader = animationLoader;
+    }
 
+    public float getGameSpeed() { return gameSpeed; }
     public void setGameSpeed(float gameSpeed) { this.gameSpeed = gameSpeed; }
 
 

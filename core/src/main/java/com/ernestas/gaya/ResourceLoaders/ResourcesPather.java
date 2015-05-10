@@ -26,6 +26,8 @@ public class ResourcesPather {
     // FX
     public String explosionSS;
 
+    public String lightning;
+
     // Sounds
 
     private ResourcesPather() {
@@ -33,7 +35,7 @@ public class ResourcesPather {
 
     public static ResourcesPather defaultResourcesPather() {
         ResourcesPather resourcesPather = new ResourcesPather();
-        String defaultPath = "Sprites/";
+        String defaultPath = "";
 
         return defaultResourcesPather(defaultPath);
     }
@@ -41,18 +43,24 @@ public class ResourcesPather {
     public static ResourcesPather defaultResourcesPather(String defaultPath) {
         ResourcesPather resourcesPather = new ResourcesPather();
 
-        resourcesPather.splash = defaultPath + "splash.png";
-        resourcesPather.background = defaultPath + "desert-background-looped.png";
-        resourcesPather.cloud = defaultPath + "clouds-transparent.png";
-        resourcesPather.shipPlayer = defaultPath + "spaceship32.png";
-        resourcesPather.shipGreen = defaultPath + "greenShip.png";
-        resourcesPather.shipWhite = defaultPath + "whiteShip.png";
-        resourcesPather.shipBlack = defaultPath + "blackShip.png";
-        resourcesPather.shipBlue = defaultPath + "blueShip.png";
-        resourcesPather.explosionSS = defaultPath + "explosionSS.png";
-        resourcesPather.simpleBullet = defaultPath + "bullets/simpleBullet.png";
-        resourcesPather.powerupSS = defaultPath + "powerupSS.png";
-        resourcesPather.menuButton = defaultPath + "menuButton.png";
+        String spritePath = "Sprites/";
+        String audioPath = "Audio/";
+        String animationsPath = "Animations/";
+
+        resourcesPather.splash = defaultPath + spritePath + "splash.png";
+        resourcesPather.background = defaultPath + spritePath + "desert-background-looped.png";
+        resourcesPather.cloud = defaultPath + spritePath + "clouds-transparent.png";
+        resourcesPather.shipPlayer = defaultPath + spritePath + "spaceship32.png";
+        resourcesPather.shipGreen = defaultPath + spritePath + "greenShip.png";
+        resourcesPather.shipWhite = defaultPath + spritePath + "whiteShip.png";
+        resourcesPather.shipBlack = defaultPath + spritePath + "blackShip.png";
+        resourcesPather.shipBlue = defaultPath + spritePath + "blueShip.png";
+        resourcesPather.simpleBullet = defaultPath + spritePath + "bullets/simpleBullet.png";
+        resourcesPather.powerupSS = defaultPath + spritePath + "powerupSS.png";
+        resourcesPather.menuButton = defaultPath + spritePath + "menuButton.png";
+        resourcesPather.explosionSS = defaultPath + spritePath + "explosionSS.png";
+
+        resourcesPather.lightning = defaultPath + animationsPath + "lightning.gif";
 
         return resourcesPather;
     }

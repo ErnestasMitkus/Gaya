@@ -54,7 +54,7 @@ public class SplashScreen implements Screen {
 
     public void update(float delta) {
         if ((alpha == 0 && !up) || (alpha == 1 && !bounce)) {
-            gaya.setScreen(new MenuScreen(gaya));
+            gaya.setScreen(new LoadingScreen(gaya));
             return;
         }
 

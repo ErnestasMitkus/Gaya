@@ -9,7 +9,9 @@ import com.ernestas.gaya.Input.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.ernestas.gaya.Menu.MainMenu;
 import com.ernestas.gaya.Menu.MenuLayer;
+import com.ernestas.gaya.ResourceLoaders.AnimationLoader;
 import com.ernestas.gaya.Util.GIFDecoder;
+import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 
 public class MenuScreen implements Screen {
@@ -38,7 +40,7 @@ public class MenuScreen implements Screen {
 
         this.batch = new SpriteBatch();
 
-        animation = GIFDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("cloudsAnim.gif").read());
+        animation = GameSettings.getInstance().getAnimationLoader().getResource(AnimationLoader.ResourceId.lightning);
         init(initialDelay);
     }
 
