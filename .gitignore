@@ -5,6 +5,9 @@
 *.ear
 hs_err_pid*
 
+## UML
+UML/
+
 ## GWT
 war/
 html/war/gwt_bree/
