@@ -65,4 +65,6 @@ public class PlayScreen implements Screen {
     public void dispose() {
 
     }
+
+    public Level getLevel() { return level; }
 }

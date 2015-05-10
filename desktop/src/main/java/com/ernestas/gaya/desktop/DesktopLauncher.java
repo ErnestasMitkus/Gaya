@@ -4,7 +4,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ernestas.gaya.Exceptions.GayaException;
 import com.ernestas.gaya.GayaEntry;
+import com.ernestas.gaya.Screens.PlayScreen;
+import com.ernestas.gaya.Ships.PlayerShip;
 import com.ernestas.gaya.Util.Settings.Settings;
+
+import java.io.IOException;
 
 public class DesktopLauncher {
     private static final float SCALE = 1.4f;
@@ -15,7 +19,43 @@ public class DesktopLauncher {
 
 	public static void main (String[] arg) {
         try {
-            launchGame(arg);
+            final GayaEntry gaya = new GayaEntry(GayaEntry.DESKTOP, arg);
+            launchGame(gaya, arg);
+
+            new Thread() {
+                @Override
+                public void run() {
+                    while (true) {
+                        byte[] buffer = new byte[1024];
+                        try {
+                            System.in.read(buffer);
+
+                            String msg = new String(buffer);
+                            msg = msg.substring(0, msg.indexOf('\n'));
+
+                            if (msg.equalsIgnoreCase("hello")) {
+                                System.out.println("Hello to you too.");
+                            } else if (msg.equalsIgnoreCase("player")) {
+                                if (gaya.getScreen() instanceof PlayScreen) {
+                                    PlayScreen screen = (PlayScreen) gaya.getScreen();
+                                    PlayerShip player = screen.getLevel().getPlayer();
+
+                                    System.out.println("Player info:");
+                                    System.out.println("position: " + player.getPosition());
+                                    System.out.println("health: " + player.getHealth());
+                                    System.out.println("score: " + player.getScore());
+                                    System.out.println("----------");
+                                } else {
+                                    System.out.println("Player is not playing... :(");
+                                }
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }.start();
         } catch(Exception e) {
             e.printStackTrace();
         } catch(Error e) {
@@ -23,13 +63,13 @@ public class DesktopLauncher {
         }
 	}
 
-    public static void launchGame(String[] arg) {
+    public static void launchGame(GayaEntry gaya, String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         configureSettings();
         configureConfig(config);
 
-        new LwjglApplication(new GayaEntry(GayaEntry.DESKTOP, arg), config);
+        new LwjglApplication(gaya != null ? gaya : new GayaEntry(GayaEntry.DESKTOP, arg), config);
     }
 
     private static void configureSettings() {
