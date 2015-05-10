@@ -93,7 +93,9 @@ public class RectangleItem implements OverlayItem {
             if (lockOn) {
                 lockOn = false;
                 // Do click
-                callback.callback();
+                if (callback != null) {
+                    callback.callback();
+                }
             }
         }
 

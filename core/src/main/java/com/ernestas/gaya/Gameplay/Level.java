@@ -76,15 +76,6 @@ public class Level {
     public void setup() {
         //TODO: do stuff
 
-        endGameOverlay = new FadingOverlay(input);
-        endGameOverlay.addItem(new RectangleItem(new Vector2f(0, 30), new LevelCallback(this, LevelCallback.RESTART_LEVEL),
-                                RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
-                                .withText("Restart"));
-        endGameOverlay.addItem(new RectangleItem(new Vector2f(0, -30), new LevelCallback(this, LevelCallback.EXIT_TO_MENU),
-                                RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
-                                .withText("Exit to menu"));
-        endGameOverlay.setFadeIn(1f);
-
         pauseOverlay = new FadingOverlay(input);
         pauseOverlay.addItem(new RectangleItem(new Vector2f(0, 90), new LevelCallback(this, LevelCallback.RESUME_LEVEL),
                                 RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
@@ -100,7 +91,23 @@ public class Level {
                                 .withText("Exit to menu"));
         pauseOverlay.setFadeIn(0.5f);
 
+        endGameOverlay = new FadingOverlay(input);
+        endGameOverlay.addItem(new RectangleItem(new Vector2f(0, 30), new LevelCallback(this, LevelCallback.RESTART_LEVEL),
+            RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
+            .withText("Restart"));
+        endGameOverlay.addItem(new RectangleItem(new Vector2f(0, -30), new LevelCallback(this, LevelCallback.EXIT_TO_MENU),
+            RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
+            .withText("Exit to menu"));
+        endGameOverlay.setFadeIn(1f);
 
+        victoryOverlay = new FadingOverlay(input);
+        victoryOverlay.addItem(new RectangleItem(new Vector2f(0, 30), null,
+            RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL, false)
+            .withText("YOU WON!"));
+        victoryOverlay.addItem(new RectangleItem(new Vector2f(0, -30), new LevelCallback(this, LevelCallback.EXIT_TO_MENU),
+            RectangleItem.ALIGN_MIDDLE_HORIZONTAL | RectangleItem.ALIGN_MIDDLE_VERTICAL)
+            .withText("Exit to menu"));
+        victoryOverlay.setFadeIn(0.5f);
 
         Sprite playerSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipPlayer);
         player = new PlayerShip(this, playerSprite, new Vector2f(Settings.getInstance().getWidth() / 2, 100));
@@ -119,8 +126,9 @@ public class Level {
         screenDimmer = new ScreenDimmer(1f, 0f, 1f);
         player.restart();
         endingDimmer = false;
-        endGameOverlay.reset();
         pauseOverlay.reset();
+        endGameOverlay.reset();
+        victoryOverlay.reset();
 
         // Save backup scenario somewhere
         try {
@@ -169,6 +177,11 @@ public class Level {
 
         if (showEndMenu()) {
             endGameOverlay.render(batch);
+        }
+
+        // Is game finished?
+        if (gameFinished()) {
+            victoryOverlay.render(batch);
         }
 
         if (paused) {
@@ -253,6 +266,11 @@ public class Level {
 
         if (showEndMenu()) {
             endGameOverlay.update(delta);
+        }
+
+        // Is game finished?
+        if (gameFinished()) {
+            victoryOverlay.update(delta);
         }
 
         if (!screenDimmer.done()) {
@@ -345,11 +363,6 @@ public class Level {
                 bullets.remove(i);
                 --i;
             }
-        }
-
-        // Is game finished?
-        if (gameFinished()) {
-            System.out.println("GAME FINISHED");
         }
     }
 
