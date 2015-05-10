@@ -4,8 +4,12 @@ import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
 import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
 import com.ernestas.gaya.Ships.EnemyShip;
+import com.ernestas.gaya.Util.SerializationRepair;
 
-public class ShooterAI extends FloatAI {
+import java.io.Serializable;
+
+public class ShooterAI extends FloatAI implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371864122261489L;
 
     protected ArsenalWrapper arsenalWrapper;
     private int damage;
@@ -38,5 +42,10 @@ public class ShooterAI extends FloatAI {
     @Override
     public AI clone() {
         return new ShooterAI(damage);
+    }
+
+    @Override
+    public void repair() {
+        arsenalWrapper.repair();
     }
 }

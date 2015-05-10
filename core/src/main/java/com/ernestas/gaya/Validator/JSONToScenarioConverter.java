@@ -1,6 +1,5 @@
 package com.ernestas.gaya.Validator;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.AI.AI;
 import com.ernestas.gaya.AI.FloatAI;
@@ -19,8 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -204,11 +201,7 @@ public class JSONToScenarioConverter {
                         .withSpeed(enemyStruct.speed)
                         .withHealth(enemyStruct.health)
                         .withAI(enemyStruct.ai.clone())
-                        .withSprite(
-                            GameSettings.getInstance().getResourceLoader().getResource(
-                                ResourceLoader.resourceIdFromName(enemyStruct.spriteName)
-                            )
-                        )
+                        .withSpriteResourceId(ResourceLoader.resourceIdFromName(enemyStruct.spriteName))
                         .build();
                 }
                 waveBuilder.withEnemy(enemy);

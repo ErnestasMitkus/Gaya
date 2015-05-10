@@ -6,7 +6,10 @@ import com.ernestas.gaya.Ships.PlayerShip;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public class HealthPowerup extends Powerup {
+import java.io.Serializable;
+
+class HealthPowerup extends Powerup implements Serializable {
+    private static final long serialVersionUID = 6435371844150232489L;
 
     private static int HEAL_AMOUNT = 10;
 
@@ -24,5 +27,10 @@ public class HealthPowerup extends Powerup {
             super.effect(level, ship);
             ship.heal(HEAL_AMOUNT);
         }
+    }
+
+    @Override
+    public void repair() {
+        sprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.healthPowerup);
     }
 }

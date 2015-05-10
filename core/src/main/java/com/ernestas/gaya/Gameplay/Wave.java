@@ -3,14 +3,19 @@ package com.ernestas.gaya.Gameplay;
 import com.ernestas.gaya.Powerups.Powerup;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Ships.Ship;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.Settings;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Wave {
+public class Wave implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435771864150261489L;
 
-    public static class EnemyWithOffset {
+    public static class EnemyWithOffset implements Serializable, SerializationRepair {
+        private static final long serialVersionUID = 6735371864150261489L;
+
         public float offsetX;
         public float offsetY;
         public EnemyShip ship;
@@ -21,6 +26,10 @@ public class Wave {
             this.ship = ship;
         }
 
+        @Override
+        public void repair() {
+            ship.repair();
+        }
     }
 
     public static class Builder {
@@ -115,4 +124,13 @@ public class Wave {
         return enemyList.isEmpty();
     }
 
+    @Override
+    public void repair() {
+        for (EnemyWithOffset enemy: enemyList) {
+            enemy.repair();
+        }
+        for (Powerup powerup: powerupList) {
+            powerup.repair();
+        }
+    }
 }

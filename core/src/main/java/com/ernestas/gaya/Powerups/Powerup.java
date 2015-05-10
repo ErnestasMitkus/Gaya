@@ -4,13 +4,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.PlayerShip;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public abstract class Powerup {
+import java.io.Serializable;
 
-    private Sprite sprite;
-    private float floatSpeed;
+public abstract class Powerup implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371844150261489L;
+
+    protected transient Sprite sprite;
+    protected float floatSpeed;
     protected boolean canRemove = false;
 
     public Powerup(Sprite sprite, Vector2f position) {

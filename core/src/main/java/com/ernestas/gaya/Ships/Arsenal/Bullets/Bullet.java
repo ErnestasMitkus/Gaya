@@ -2,17 +2,23 @@ package com.ernestas.gaya.Ships.Arsenal.Bullets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Ships.Ship;
+import com.ernestas.gaya.Util.SerializationRepair;
+import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public abstract class Bullet {
+import java.io.Serializable;
+
+public abstract class Bullet implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6400071864150261489L;
 
     private float bulletXOffset = 7;
 
     protected Ship author;
 
-    protected Sprite sprite;
+    protected transient Sprite sprite;
     protected float speed;
     protected Vector2f vector;
     protected int damage;
@@ -61,7 +67,6 @@ public abstract class Bullet {
     public void setDamage(int damage) {
         this.damage = damage;
     }
-
 
     public Ship getAuthor() {
         return author;

@@ -1,15 +1,19 @@
 package com.ernestas.gaya.Ships.Arsenal;
 
+import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.SimpleBullet;
 import com.ernestas.gaya.Ships.PlayerShip;
 import com.ernestas.gaya.Ships.Ship;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Arsenal {
+public class Arsenal implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371124150261489L;
 
     public enum BulletType {
         singleBullet, doubleBullet, tripleBullet, pentaBullet
@@ -19,7 +23,7 @@ public class Arsenal {
     private boolean isEnemyShip;
     private int damage;
 
-    BulletType bulletType;
+    private BulletType bulletType;
 
     public Arsenal(Ship ship) {
         this(ship, 1);
@@ -118,5 +122,9 @@ public class Arsenal {
         bullets.add(new SimpleBullet(ship, new Vector2f(ship.getBounds().getX() - 20, ship.getBounds().getY() - 15), new Vector2f(0, 1)));
         bullets.add(new SimpleBullet(ship, new Vector2f(ship.getBounds().getX() + 20, ship.getBounds().getY() - 15), new Vector2f(0, 1)));
     }
+
+
+    @Override
+    public void repair() {}
 
 }

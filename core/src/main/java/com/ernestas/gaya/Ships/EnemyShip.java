@@ -2,10 +2,16 @@ package com.ernestas.gaya.Ships;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.AI.AI;
+import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
+import com.ernestas.gaya.Util.SerializationRepair;
+import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public class EnemyShip extends Ship {
+import java.io.Serializable;
+
+public class EnemyShip extends Ship implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6499371864150261489L;
 
     public static class Builder {
         private EnemyShip ship;
@@ -14,8 +20,8 @@ public class EnemyShip extends Ship {
             ship = new EnemyShip();
         }
 
-        public Builder withSprite(Sprite sprite) {
-            ship.setSprite(sprite);
+        public Builder withSpriteResourceId(ResourceLoader.ResourceId resId) {
+            ship.setSpriteResourceId(resId);
             return this;
         }
 
@@ -45,7 +51,7 @@ public class EnemyShip extends Ship {
 
     }
 
-    private Sprite sprite;
+    private transient Sprite sprite;
     private int health;
     private float speed;
 
@@ -104,8 +110,9 @@ public class EnemyShip extends Ship {
         return result;
     }
 
-    public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
+    public void setSpriteResourceId(ResourceLoader.ResourceId resId) {
+        this.resId = resId;
+        this.sprite = GameSettings.getInstance().getResourceLoader().getResource(resId);
         setBounds(sprite.getBoundingRectangle());
     }
 
@@ -135,4 +142,10 @@ public class EnemyShip extends Ship {
 
     public AI getAI() { return ai; }
 
+    @Override
+    public void repair() {
+        ai.repair();
+        init();
+        setSpriteResourceId(resId);
+    }
 }

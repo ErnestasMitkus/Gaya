@@ -6,15 +6,20 @@ import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.Spritesheet.Animation;
 import com.ernestas.gaya.Spritesheet.Spritesheet;
 import com.ernestas.gaya.Util.Printable;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public abstract class Ship implements Printable {
+import java.io.Serializable;
 
-    protected Animation explosionAnimation;
+public abstract class Ship implements Printable, Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435071864150261489L;
+
+    protected transient Animation explosionAnimation;
     protected Vector2f position;
     protected Rectangle bounds;
+    protected ResourceLoader.ResourceId resId = null;
 
     protected boolean exploding = false;
     protected boolean explodingDone = false;
@@ -39,7 +44,7 @@ public abstract class Ship implements Printable {
         init();
     }
 
-    private void init() {
+    protected void init() {
         Spritesheet spritesheet = new Spritesheet(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.explosionSS).getTexture(),
             32, 32, 14);
         explosionAnimation = new Animation(spritesheet, (int) position.x, (int) position.y, 8, Animation.frameRateToDeltaRate(Settings.getInstance().getFrameRate()));

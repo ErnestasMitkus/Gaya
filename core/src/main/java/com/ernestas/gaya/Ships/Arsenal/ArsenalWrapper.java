@@ -1,6 +1,11 @@
 package com.ernestas.gaya.Ships.Arsenal;
 
-public class ArsenalWrapper {
+import com.ernestas.gaya.Util.SerializationRepair;
+
+import java.io.Serializable;
+
+public class ArsenalWrapper implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371864780261489L;
 
     private Arsenal arsenal;
 
@@ -30,4 +35,8 @@ public class ArsenalWrapper {
 
     public Arsenal getArsenal() { return arsenal; }
 
+    @Override
+    public void repair() {
+        arsenal.repair();
+    }
 }

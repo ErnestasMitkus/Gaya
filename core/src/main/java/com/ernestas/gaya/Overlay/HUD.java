@@ -7,12 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Util.Fonts.FontFactory;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.Settings;
 
-public class HUD {
+import java.io.Serializable;
 
-    Level level;
-    BitmapFont font;
+public class HUD implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371812350261489L;
+
+    private Level level;
+    private transient BitmapFont font;
 
     public HUD(Level level) {
         this.level = level;
@@ -48,4 +52,8 @@ public class HUD {
         // player amunition ?
     }
 
+    @Override
+    public void repair() {
+        font = FontFactory.getInstance().getFont(FontFactory.FontId.Calibri);
+    }
 }

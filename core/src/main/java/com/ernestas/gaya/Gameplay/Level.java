@@ -24,18 +24,21 @@ import com.ernestas.gaya.Overlays.Items.RectangleItem;
 import com.ernestas.gaya.Ships.Arsenal.Bullets.Bullet;
 import com.ernestas.gaya.Ships.EnemyShip;
 import com.ernestas.gaya.Ships.PlayerShip;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 import com.ernestas.gaya.Validator.JSONToScenarioConverter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+public class Level implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371864150261489L;
 
-    private GayaEntry gaya;
-    private InputProcessor input;
+    private transient GayaEntry gaya;
+    private transient InputProcessor input;
 
     private HUD hud;
     private ScreenDimmer screenDimmer;
@@ -48,7 +51,7 @@ public class Level {
     private Wave currentWave;
 
 //    Background
-    private LoopedBackground bg;
+    private transient LoopedBackground bg;
 
 //    Player
     private PlayerShip player;
@@ -57,9 +60,9 @@ public class Level {
     private List<Bullet> bullets = new ArrayList<Bullet>();
 
     // Overlays
-    private FadingOverlay pauseOverlay;
-    private FadingOverlay endGameOverlay;
-    private FadingOverlay victoryOverlay;
+    private transient FadingOverlay pauseOverlay;
+    private transient FadingOverlay endGameOverlay;
+    private transient FadingOverlay victoryOverlay;
 
     // Debug
     private boolean debug;
@@ -70,6 +73,11 @@ public class Level {
         this.gaya = gaya;
         this.input = input;
         hud = new HUD(this);
+    }
+
+    public void requirementsAfterDeserialization(GayaEntry gaya, InputProcessor input) {
+        this.gaya = gaya;
+        this.input = input;
     }
 
     // Should be only called once
@@ -109,8 +117,7 @@ public class Level {
             .withText("Exit to menu"));
         victoryOverlay.setFadeIn(0.5f);
 
-        Sprite playerSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.shipPlayer);
-        player = new PlayerShip(this, playerSprite, new Vector2f(Settings.getInstance().getWidth() / 2, 100));
+        player = new PlayerShip(this, ResourceLoader.ResourceId.shipPlayer, new Vector2f(Settings.getInstance().getWidth() / 2, 100));
 
         Sprite bgSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.background);
         bgSprite.setScale((Settings.getInstance().getWidth() / bgSprite.getWidth()), bgSprite.getScaleY());
@@ -384,5 +391,28 @@ public class Level {
     public boolean gameFinished() { return scenario.scenarioCompleted() && currentWave == Wave.EMPTY_WAVE; }
     public PlayerShip getPlayer() { return player; }
     public InputProcessor getInput() { return input; }
+    public String getLevelName() { return scenario.getName(); }
     private boolean showEndMenu() { return endingDimmer && screenDimmer.done(); }
+
+    public void destroy() {
+        System.out.println("Old level is being destroyed");
+        //TODO: dispose of everything disposable
+    }
+
+    @Override
+    public void repair() {
+        Sprite bgSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.background);
+        bgSprite.setScale((Settings.getInstance().getWidth() / bgSprite.getWidth()), bgSprite.getScaleY());
+        bg = new LoopedBackground(new Sprite(bgSprite), -GameSettings.getInstance().getGameSpeed(), false);
+
+
+        hud.repair();
+        screenDimmer.repair();
+        scenario.repair();
+        currentWave.repair();
+        player.repair();
+        for (Bullet bullet: bullets) {
+            bullet.repair();
+        }
+    }
 }

@@ -2,12 +2,16 @@ package com.ernestas.gaya.Overlay;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 
-public class ScreenDimmer {
+import java.io.Serializable;
 
-    private Sprite dimmerSprite;
+public class ScreenDimmer implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435371812350261489L;
+
+    private transient Sprite dimmerSprite;
     private float startAlpha;
     private float targetAlpha;
     private float duration;
@@ -44,4 +48,10 @@ public class ScreenDimmer {
         return duration - elapsed < 0;
     }
 
+    @Override
+    public void repair() {
+        dimmerSprite = GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.blackSprite);
+        dimmerSprite.setScale(Settings.getInstance().getWidth(), Settings.getInstance().getHeight());
+        dimmerSprite.setAlpha(startAlpha);
+    }
 }

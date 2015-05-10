@@ -40,7 +40,7 @@ public class LoadingScreen implements Screen {
             game.setScreen(new MenuScreen(game));
         } else {
             if (renderCount > 60) {
-                GlobalLoader.load();
+                GlobalLoader.load(); // blocking function.
             }
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -49,12 +49,7 @@ public class LoadingScreen implements Screen {
 
             BitmapFont.TextBounds titleBounds = font.getBounds(loadingTitle);
             font.draw(batch, loadingTitle, (Settings.getInstance().getWidth() - titleBounds.width) / 2,
-                (Settings.getInstance().getHeight() + titleBounds.height) / 2 - 20);
-
-            progress = GlobalLoader.getLoadingMessage();
-            BitmapFont.TextBounds progressBounds = font.getBounds(progress);
-            font.draw(batch, progress, (Settings.getInstance().getWidth() - progressBounds.width) / 2,
-                (Settings.getInstance().getHeight() + progressBounds.height) / 2 + 20);
+                (Settings.getInstance().getHeight() + titleBounds.height) / 2);
 
             batch.end();
         }

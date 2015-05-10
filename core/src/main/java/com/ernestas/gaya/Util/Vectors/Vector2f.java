@@ -1,6 +1,11 @@
 package com.ernestas.gaya.Util.Vectors;
 
-public class Vector2f {
+import com.ernestas.gaya.Util.SerializationRepair;
+
+import java.io.Serializable;
+
+public class Vector2f implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6785371864150261489L;
 
     public float x;
     public float y;
@@ -41,4 +46,7 @@ public class Vector2f {
     public Vector2f scale(float scale) {
         return new Vector2f(this.x * scale, this.y * scale);
     }
+
+    @Override
+    public void repair() {}
 }

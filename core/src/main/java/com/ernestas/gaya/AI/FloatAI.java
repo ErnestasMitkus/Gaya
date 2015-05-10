@@ -2,9 +2,13 @@ package com.ernestas.gaya.AI;
 
 import com.ernestas.gaya.Gameplay.Level;
 import com.ernestas.gaya.Ships.EnemyShip;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.Settings;
 
-public class FloatAI implements AI {
+import java.io.Serializable;
+
+public class FloatAI implements AI, Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6435333864150261489L;
 
     protected Level level;
     protected EnemyShip ship;
@@ -29,5 +33,10 @@ public class FloatAI implements AI {
     @Override
     public AI clone() {
         return new FloatAI();
+    }
+
+    @Override
+    public void repair() {
+
     }
 }

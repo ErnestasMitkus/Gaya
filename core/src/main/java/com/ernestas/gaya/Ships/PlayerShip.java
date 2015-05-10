@@ -8,17 +8,22 @@ import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
 import com.ernestas.gaya.ResourceLoaders.SpriteScaler;
 import com.ernestas.gaya.Ships.Arsenal.Arsenal;
 import com.ernestas.gaya.Ships.Arsenal.ArsenalWrapper;
+import com.ernestas.gaya.Spritesheet.Animation;
+import com.ernestas.gaya.Util.SerializationRepair;
 import com.ernestas.gaya.Util.Settings.GameSettings;
 import com.ernestas.gaya.Util.Settings.Settings;
 import com.ernestas.gaya.Util.Vectors.Vector2f;
 
-public class PlayerShip extends Ship {
+import java.io.Serializable;
+
+public class PlayerShip extends Ship  implements Serializable, SerializationRepair {
+    private static final long serialVersionUID = 6425371864150261489L;
 
     private static final int MAX_HEALTH = 30;
     private static final float DEFAULT_SPEED = 150f;
     private static final float INVULNERABILITY_TIME = 1f;
 
-    private Sprite sprite = null;
+    private transient Sprite sprite = null;
     private int health = MAX_HEALTH;
     private float speed = DEFAULT_SPEED;
 
@@ -36,9 +41,10 @@ public class PlayerShip extends Ship {
         arsenalWrapper = new ArsenalWrapper(new Arsenal(this), 0.5f);
     }
 
-    public PlayerShip(Level level, Sprite sprite, Vector2f position) {
+    public PlayerShip(Level level, ResourceLoader.ResourceId resId, Vector2f position) {
         this(level, position);
-        this.sprite = sprite;
+        this.resId = resId;
+        this.sprite = GameSettings.getInstance().getResourceLoader().getResource(resId);
         setBounds(sprite.getBoundingRectangle());
         setPosition(getPosition());
     }
@@ -187,5 +193,12 @@ public class PlayerShip extends Ship {
 
     public Arsenal getArsenal() {
         return arsenalWrapper.getArsenal();
+    }
+
+    @Override
+    public void repair() {
+        arsenalWrapper.repair();
+        init();
+        this.sprite = GameSettings.getInstance().getResourceLoader().getResource(resId);
     }
 }
