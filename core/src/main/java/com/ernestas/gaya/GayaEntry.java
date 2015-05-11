@@ -2,6 +2,7 @@ package com.ernestas.gaya;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.ernestas.gaya.Input.InputProcessor;
 import com.ernestas.gaya.ResourceLoaders.GlobalLoader;
 import com.ernestas.gaya.ResourceLoaders.ResourceLoader;
@@ -121,5 +122,8 @@ public class GayaEntry extends Game {
     public int getDevice() { return DEVICE; }
     public InputProcessor getInputProcessor() {
         return input;
+    }
+    public synchronized Screen getScreen() {
+        return super.getScreen();
     }
 }

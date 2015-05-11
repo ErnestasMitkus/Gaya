@@ -164,5 +164,5 @@ public class PlayScreen implements Screen {
         return level;
     }
 
-    public Level getLevel() { return level; }
+    public synchronized Level getLevel() { return level; }
 }

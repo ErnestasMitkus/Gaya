@@ -389,7 +389,7 @@ public class Level implements Serializable, SerializationRepair {
     }
 
     public boolean gameFinished() { return scenario.scenarioCompleted() && currentWave == Wave.EMPTY_WAVE; }
-    public PlayerShip getPlayer() { return player; }
+    public synchronized PlayerShip getPlayer() { return player; }
     public InputProcessor getInput() { return input; }
     public String getLevelName() { return scenario.getName(); }
     private boolean showEndMenu() { return endingDimmer && screenDimmer.done(); }
