@@ -36,11 +36,22 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
     private float timeSinceLastBlinked = 0;
     private boolean visible = true;
 
+    /**
+     *
+     * @param level current level
+     * @param position initial position
+     */
     public PlayerShip(Level level, Vector2f position) {
         super(level, position);
         arsenalWrapper = new ArsenalWrapper(new Arsenal(this), 0.5f);
     }
 
+    /**
+     *
+     * @param level current level
+     * @param resId image's resource id
+     * @param position initial position
+     */
     public PlayerShip(Level level, ResourceLoader.ResourceId resId, Vector2f position) {
         this(level, position);
         this.resId = resId;
@@ -49,6 +60,9 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
         setPosition(getPosition());
     }
 
+    /**
+     * resets ship's info
+     */
     public void restart() {
         arsenalWrapper.getArsenal().resetBulletType();
         score = 0;
@@ -59,6 +73,10 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
         explosionAnimation.restart();
     }
 
+    /**
+     *
+     * @return ship's image or explosion animation if ship is exploding
+     */
     public Sprite getSprite() {
         Sprite result;
         if (exploding) {
@@ -88,6 +106,11 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
         return result;
     }
 
+    /**
+     * Update method, which should be called every frame
+     * @param input input processor for player's input handling
+     * @param delta time since last frame
+     */
     public void update(InputProcessor input, float delta) {
         super.update(delta);
 
@@ -167,6 +190,11 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
         }
     }
 
+    /**
+     * Method to damage the ship
+     * (Won't get damaged if ship is invulnerable)
+     * @param damage how much damage the ship should take
+     */
     public void hitFor(int damage) {
         if (vulnerable()) {
             health -= damage;
@@ -178,23 +206,63 @@ public class PlayerShip extends Ship  implements Serializable, SerializationRepa
         }
     }
 
+    /**
+     *
+     * @return True if ship is exploded and the explosion animation is done
+     */
     public boolean dead() { return health <= 0 && exploded(); }
+
+    /**
+     *
+     * @return True, if ship is not invulnerable
+     */
     public boolean vulnerable() { return invulnerabilityTime <= 0; }
 
+    /**
+     * Heals the ship
+     * @param amount how much to heal the ship
+     */
     public void heal(int amount) {
         health = Math.min(MAX_HEALTH, health + amount);
     }
+
+    /**
+     *
+     * @return ship's current health
+     */
     public int getHealth() { return health; }
+
+    /**
+     *
+     * @return ship's max health
+     */
     public int getMaxHealth() { return MAX_HEALTH; }
+
+    /**
+     *
+     * @param points amount to add to the ship's score
+     */
     public void addScore(int points) {
         score += points;
     }
+
+    /**
+     *
+     * @return ship's score
+     */
     public int getScore() { return score; }
 
+    /**
+     *
+     * @return ship's Arsenal
+     */
     public Arsenal getArsenal() {
         return arsenalWrapper.getArsenal();
     }
 
+    /**
+     * Method to call after loading the object from serialization
+     */
     @Override
     public void repair() {
         arsenalWrapper.repair();

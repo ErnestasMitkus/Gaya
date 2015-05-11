@@ -17,7 +17,13 @@ public abstract class Ship implements Printable, Serializable, SerializationRepa
     private static final long serialVersionUID = 6435071864150261489L;
 
     protected transient Animation explosionAnimation;
+    /**
+     * ship's center position
+     */
     protected Vector2f position;
+    /**
+     * ship's image's bounding rectangle
+     */
     protected Rectangle bounds;
     protected ResourceLoader.ResourceId resId = null;
 
@@ -26,17 +32,22 @@ public abstract class Ship implements Printable, Serializable, SerializationRepa
 
     protected Level level;
 
-    /*
-    *   Position    - position of the ship's center
-    *   Bounds      - ship's bounding rectangle
-    */
 
     public Ship() { this(null); }
 
+    /**
+     *
+     * @param level current level
+     */
     public Ship(Level level) {
         this(level, new Vector2f());
     }
 
+    /**
+     *
+     * @param level current level
+     * @param position initial position
+     */
     public Ship(Level level, Vector2f position) {
         this.level = level;
         this.position = position;
@@ -44,12 +55,19 @@ public abstract class Ship implements Printable, Serializable, SerializationRepa
         init();
     }
 
+    /**
+     * Initialization method, which should be called from any child class
+     */
     protected void init() {
         Spritesheet spritesheet = new Spritesheet(GameSettings.getInstance().getResourceLoader().getResource(ResourceLoader.ResourceId.explosionSS).getTexture(),
             32, 32, 14);
         explosionAnimation = new Animation(spritesheet, (int) position.x, (int) position.y, 8, Animation.frameRateToDeltaRate(Settings.getInstance().getFrameRate()));
     }
 
+    /**
+     * Update method, which should be called every frame
+     * @param delta time since last frame
+     */
     public void update(float delta) {
         if (exploding && !explodingDone) {
             explosionAnimation.update(delta);
@@ -76,16 +94,38 @@ public abstract class Ship implements Printable, Serializable, SerializationRepa
         this.bounds = bounds;
     }
 
+    /**
+     * Explodes the ship, causing to replace it's sprite with an explosion animation
+     */
     public void explode() {
         exploding = true;
     }
 
+    /**
+     *
+     * @return ship's center position
+     */
     public Vector2f getPosition() { return position; }
+
+    /**
+     *
+     * @return ship's image's bounding rectangle
+     */
     public Rectangle getBounds() { return bounds; }
 
     public void setLevel(Level level) { this.level = level; }
+
+    /**
+     *
+     * @return level the ship is in
+     */
     public Level getLevel() { return level; }
 
+    /**
+     *
+     * @param ship
+     * @return true if ship collides with any other not exploding ship
+     */
     public boolean collidesWith(Ship ship) {
         if (this.getBounds().overlaps(ship.getBounds())) {
             if (!this.exploding && !ship.exploding) {
@@ -96,17 +136,34 @@ public abstract class Ship implements Printable, Serializable, SerializationRepa
     }
 
     // Final, because we don't want out children to override this method
+
+    /**
+     * Prints out ship's info to the console
+     */
     public final void println() {
         System.out.println(this.toString());
     }
 
+    /**
+     *
+     * @return ship's representation as a string
+     */
     @Override
     public String toString() {
         return this.getClass() + " position:["  + position.toString() + "] bounds:[" + bounds.toString() + "]";
     }
 
+    /**
+     *
+     * @return true if ship is exploding
+     */
     public boolean isExploding() {
         return exploding;
     }
+
+    /**
+     *
+     * @return true if ship's explosion animation has been completed
+     */
     public boolean exploded() { return explodingDone; }
 }
